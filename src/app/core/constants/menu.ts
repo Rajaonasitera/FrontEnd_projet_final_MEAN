@@ -3,20 +3,21 @@ import { MenuItem } from '../models/menu.model';
 export class Menu {
   public static pages: MenuItem[] = [
     {
-      group: 'Base',
+      group: 'Nos services',
+      route: '/dashboard/nfts',
       separator: false,
-      items: [
-        {
-          icon: 'assets/icons/heroicons/outline/chart-pie.svg',
-          label: 'Nos services',
-          route: '/dashboard',
-          children: [
-            { label: 'Lavage', route: '/dashboard/nfts' },
-            { label: 'Reparation', route: '/dashboard/podcast' },
-            { label: 'Vidange', route: '/components/table' },
-            // { label: 'Podcast', route: '/dashboard/podcast' },
-          ],
-        },
+      // items: [
+        // {
+          // icon: 'assets/icons/heroicons/outline/chart-pie.svg',
+          // label: 'Nos services',
+          // route: '/dashboard',
+          // children: [
+          //   { label: 'Lavage', route: '/dashboard/nfts' },
+          //   { label: 'Reparation', route: '/dashboard/podcast' },
+          //   { label: 'Vidange', route: '/components/table' },
+          //   // { label: 'Podcast', route: '/dashboard/podcast' },
+          // ],
+        // },
         // {
         //   icon: 'assets/icons/heroicons/outline/lock-closed.svg',
         //   label: 'Auth',
@@ -44,8 +45,23 @@ export class Menu {
         //   route: '/components',
         //   children: [{ label: 'Table', route: '/components/table' }],
         // },
-      ],
+      // ],
     },
+    {
+      group: 'Produits',
+      route: '/components',
+      separator: false,
+    },
+    {
+      group: 'A propos',
+      route: '/auth',
+      separator: false,
+    },
+    {
+      group: 'Se connecter',
+      route: '/auth',
+      separator: false,
+    }
     // {
     //   group: 'Collaboration',
     //   separator: true,

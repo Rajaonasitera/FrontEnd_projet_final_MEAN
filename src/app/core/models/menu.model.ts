@@ -1,9 +1,10 @@
 export interface MenuItem {
   group: string;
+  route?: string | null;
   separator?: boolean;
   selected?: boolean;
   active?: boolean;
-  items: Array<SubMenuItem>;
+  // items: Array<SubMenuItem>;
 }
 
 export interface SubMenuItem {

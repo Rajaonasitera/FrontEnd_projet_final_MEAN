@@ -14,27 +14,34 @@ export class MenuService implements OnDestroy {
   private _subscription = new Subscription();
 
   constructor(private router: Router) {
-    /** Set dynamic menu */
     this._pagesMenu.set(Menu.pages);
-
+  
     let sub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        /** Expand menu base on active route */
         this._pagesMenu().forEach((menu) => {
           let activeGroup = false;
-          menu.items.forEach((subMenu) => {
-            const active = this.isActive(subMenu.route);
-            subMenu.expanded = active;
-            subMenu.active = active;
-            if (active) activeGroup = true;
-            if (subMenu.children) {
-              this.expand(subMenu.children);
-            }
-          });
+  
+          if (menu.route) {
+            menu.active = this.isActive(menu.route);
+            activeGroup = menu.active;
+          }
+  
+          // menu.items?.forEach((subMenu) => {
+          //   const active = this.isActive(subMenu.route);
+          //   subMenu.expanded = active;
+          //   subMenu.active = active;
+          //   if (active) activeGroup = true;
+  
+          //   if (subMenu.children?.length) {
+          //     this.expand(subMenu.children);
+          //   }
+          // });
+  
           menu.active = activeGroup;
         });
       }
     });
+  
     this._subscription.add(sub);
   }
 
