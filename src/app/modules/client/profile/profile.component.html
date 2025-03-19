@@ -1,0 +1,78 @@
+<div id="main-content" class="flex flex-col items-center justify-center w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
+    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+  
+      <div class="flex items-center gap-4 bg-card p-6 rounded-lg shadow-md">
+        <img class="w-16 h-16 rounded-full border-2 border-muted" src="../../../../assets/images/img-01.jpg" alt="Photo de profil">
+        <div>
+          <h2 class="text-lg font-bold text-foreground">John Doe</h2>
+          <p class="text-sm text-muted-foreground">Client fidèle depuis 2021</p>
+        </div>
+      </div>
+  
+      <div class="mt-6 rounded-lg bg-background px-8 py-8 shadow-md">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-semibold text-foreground">Suivi des Services</h3>
+          <button class="rounded-md bg-card px-4 py-2.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground">
+            Voir l'historique
+          </button>
+        </div>
+  
+        <div class="relative overflow-x-auto">
+          <table class="w-full table-auto">
+            <thead class="text-xs uppercase text-muted-foreground">
+              <tr>
+                <th class="py-3 text-left">Service</th>
+                <th class="py-3 text-right">Statut</th>
+                <th class="py-3 text-right">Date du Rendez-vous</th>
+                <th class="py-3 text-right">Détails</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let service of suiviServices" class="border-b border-dashed border-border hover:bg-card">
+                <td class="py-3 text-left">{{ service.nom }}</td>
+                <td class="py-3 text-right">
+                  <span [ngClass]="{
+                    'text-green-500': service.statut === 'Terminé',
+                    'text-yellow-500': service.statut === 'En cours',
+                    'text-red-500': service.statut === 'En attente'
+                  }">
+                    {{ service.statut }}
+                  </span>
+                </td>
+                <td class="py-3 text-right">{{ service.dateRdv | date: 'dd/MM/yyyy' }}</td>
+                <td class="py-3 text-right">
+                  <button class="text-blue-500 hover:underline">Voir</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+        <div class="mt-8 mb-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-foreground">Produits Achetés</h3>
+        </div>
+  
+        <div class="relative overflow-x-auto">
+          <table class="w-full table-auto">
+            <thead class="text-xs uppercase text-muted-foreground">
+              <tr>
+                <th class="py-3 text-left">Produit</th>
+                <th class="py-3 text-right">Prix</th>
+                <th class="py-3 text-right">Quantité</th>
+                <th class="py-3 text-right">Date d'achat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let produit of produitsAchetes" class="border-b border-dashed border-border hover:bg-card">
+                <td class="py-3 text-left">{{ produit.nom }}</td>
+                <td class="py-3 text-right">{{ produit.prix | currency:'EUR' }}</td>
+                <td class="py-3 text-right">{{ produit.quantite }}</td>
+                <td class="py-3 text-right">{{ produit.dateAchat | date: 'dd/MM/yyyy' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

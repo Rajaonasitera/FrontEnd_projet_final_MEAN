@@ -1,0 +1,37 @@
+<div id="main-content" class="flex flex-col items-center justify-center w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
+    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+        <form class="space-y-6" (ngSubmit)="onSubmit()">
+            <div class="text-center">
+                <h2 class="text-gray-900 text-3xl font-bold">Prise de Rendez-vous</h2>
+                <p class="text-gray-600 text-sm mt-2">Remplissez le formulaire pour réserver votre rendez-vous.</p>
+            </div>
+
+            <div class="form__group">
+                <label for="dateRdv" class="block text-sm font-medium text-gray-700">Date du Rendez-vous</label>
+                <input type="date" id="dateRdv" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" formControlName="dateRdv" required />
+            </div>
+
+            <div class="form__group">
+                <label for="voiture" class="block text-sm font-medium text-gray-700">Véhicule à Réparer</label>
+                <input type="text" id="voiture" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Peugeot 208" formControlName="voiture" required />
+            </div>
+
+            <div class="form__group">
+                <label for="service" class="block text-sm font-medium text-gray-700">Service à Effectuer</label>
+                <select id="service" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" formControlName="service" required>
+                    <option value="">Sélectionnez un service</option>
+                    <option *ngFor="let service of services" [value]="service.id">
+                        {{ service.nom }}
+                    </option>
+                </select>
+                
+            </div>
+
+            <div>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md transition-all duration-300">
+                    Valider la demande de RDV
+                </button>  
+            </div>
+        </form>
+    </div>
+</div>

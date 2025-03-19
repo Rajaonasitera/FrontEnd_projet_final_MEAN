@@ -1,19 +1,93 @@
 <div>
-    <div class="banner">
-        <div class="banner-content">
-            <h1>Bienvenue chez Garage Auto</h1>
-            <p>Entretien, réparation et expertise automobile. Faites confiance à nos professionnels pour prendre soin de votre voiture.</p>
-            <a href="#services" class="btn">Nos Services</a>
+  <div class="banner">
+      <div class="banner-content">
+          <h1>Bienvenue chez Garage Auto</h1>
+          <p>Entretien, réparation et expertise automobile. Faites confiance à nos professionnels pour prendre soin de votre voiture.</p>
+          <a href="#services" class="btn">Nos Services</a>
+      </div>
+  </div>
+  <div id="main-content" class="flex flex-col items-center justify-center scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted w-full">
+    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+      
+        <div class="py-16 px-6 text-center" style="margin-top: 100px; margin-bottom: 100px;">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+              <!-- Texte à gauche -->
+              <div class="md:w-1/2 text-left">
+                <h2 class="text-3xl font-bold mb-4">Pourquoi choisir Garage Auto ?</h2>
+                <p class="text-gray-700 leading-relaxed" style="margin-top: 10px;">
+                  Avec plus de 20 ans d'expérience, notre garage vous propose des services de réparation, d'entretien et de diagnostic de qualité. Nos experts vous assurent un travail rapide et efficace, avec un souci du détail et de la satisfaction client.
+                </p>
+                <div class="mt-6">
+                  <a href="#contact" class="btn" style="margin: 20px;">
+                    Contactez-nous
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Image à droite -->
+              <div class="md:w-1/2 flex justify-center">
+                <img src="../../../../assets/images/garage.jpg" 
+                     alt="Garage Auto" 
+                     class="rounded-lg shadow-lg w-full max-w-sm">
+              </div>
+            </div>
+          </div>
+  
+      <!-- 🛠️ Services -->
+      <div class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div nft-dual-card [nft]="nft[0]" class="md:col-span-2"></div>
+        <div nft-single-card [nft]="nft[1]"></div>
+        <div nft-single-card [nft]="nft[2]"></div>
+        <div nft-single-card [nft]="nft[2]"></div>
+        <div nft-single-card [nft]="nft[2]"></div>
+        <div nft-single-card [nft]="nft[2]"></div>
+      </div>
+  
+      <!-- ⭐ Section Avis Clients -->
+<div class="py-16 text-center" style="margin-top: 60px; margin-bottom: 100px;">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800" style="margin:50px;">Avis de nos clients</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
+      <div class="p-8">
+        <p class="text-gray-600 italic">"Super garage ! Service rapide et équipe très sympa. Je recommande fortement !"</p>
+        <div class="mt-4 flex items-center justify-center">
+          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+          <div>
+            <p class="font-semibold text-gray-900">Jean Dupont</p>
+            <p class="text-yellow-500">★★★★★</p>
+          </div>
         </div>
-    </div>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-      <div nft-dual-card [nft]="nft[0]" class="md:col-span-2"></div>
-      <div nft-single-card [nft]="nft[1]"></div>
-      <div nft-single-card [nft]="nft[2]"></div>
-      <div nft-single-card [nft]="nft[2]"></div>
-      <div nft-single-card [nft]="nft[2]"></div>
-      <div nft-single-card [nft]="nft[2]"></div>
-      <div nft-single-card [nft]="nft[2]"></div>
+      </div>
+      
+  
+      <div class="p-8">
+        <p class="text-gray-600 italic">"Un excellent garage avec des prix abordables et un service impeccable."</p>
+        <div class="mt-4 flex items-center justify-center">
+          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+          <div>
+            <p class="font-semibold text-gray-900">Sophie Martin</p>
+            <p class="text-yellow-500">★★★★★</p>
+          </div>
+        </div>
+      </div>
+      
+  
+      <div class="p-8">
+        <p class="text-gray-600 italic">"Des mécaniciens professionnels et honnêtes. Très satisfait du service !"</p>
+        <div class="mt-4 flex items-center justify-center">
+          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+          <div>
+            <p class="font-semibold text-gray-900">Michel Leroy</p>
+            <p class="text-yellow-500">★★★★★</p>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
+  
+  
+    </div>
+  </div>
+  
+</div>
   

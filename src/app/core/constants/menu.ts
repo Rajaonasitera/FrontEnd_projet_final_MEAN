@@ -4,7 +4,7 @@ export class Menu {
   public static pages: MenuItem[] = [
     {
       group: 'Nos services',
-      route: '/dashboard/nfts',
+      route: '/client/service',
       separator: false,
       // items: [
         // {
@@ -49,19 +49,14 @@ export class Menu {
     },
     {
       group: 'Produits',
-      route: '/components',
+      route: '/client/produits',
       separator: false,
     },
-    {
-      group: 'A propos',
-      route: '/auth',
-      separator: false,
-    },
-    {
-      group: 'Se connecter',
-      route: '/auth',
-      separator: false,
-    }
+    // {
+    //   group: 'Se connecter',
+    //   route: '/auth',
+    //   separator: false,
+    // }
     // {
     //   group: 'Collaboration',
     //   separator: true,
