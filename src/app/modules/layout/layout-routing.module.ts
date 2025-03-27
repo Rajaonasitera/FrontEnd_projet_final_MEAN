@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ClientComponent } from '../client/client.component';
+import { AdminComponent } from '../admin/admin.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,11 @@ const routes: Routes = [
     path: 'client',
     component: LayoutComponent,
     loadChildren: () => import('../client/client.module').then((m) => m.ClientModule),
+  },
+  {
+    path: 'admin',
+    component: LayoutComponent,
+    loadChildren: () => import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'components',

@@ -14,18 +14,14 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 export class SignInComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
-  passwordTextType!: boolean;
+  passwordTextType = false;
 
-  constructor(private readonly _formBuilder: FormBuilder, private readonly _router: Router) {}
-
-  onClick() {
-    console.log('Button clicked');
-  }
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
-    this.form = this._formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+    this.form = this.fb.group({
+      telephone: ['', [Validators.required]], 
+      password: ['', Validators.required]
     });
   }
 
@@ -38,14 +34,14 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit() {
+
     this.submitted = true;
-    const { email, password } = this.form.value;
+    if (this.form.invalid) return;
 
-    // stop here if form is invalid
-    if (this.form.invalid) {
-      return;
-    }
-
-    this._router.navigate(['/']);
+    localStorage.setItem("telephone", this.form.get('telephone')?.value);
+    localStorage.setItem("password", this.form.get('telephone')?.value);
+    this.router.navigate(['/']);
+    
+    // console.log('Données de connexion:', this.form.value);
   }
 }

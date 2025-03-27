@@ -12,7 +12,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 })
 export class LayoutComponent implements OnInit {
   private mainContent: HTMLElement | null = null;
-
+  isAdmin: boolean = false;
+  isClient: boolean = false;
+  isConnected: boolean = false;
   constructor(private router: Router) {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -25,5 +27,11 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.mainContent = document.getElementById('main-content');
+    if (localStorage.getItem("telephone")=="12") {
+      this.isClient = true;
+    }
+    else{
+      this.isAdmin = true;
+    }
   }
 }
