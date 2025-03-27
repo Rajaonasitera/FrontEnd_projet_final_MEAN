@@ -15,6 +15,7 @@ export class LayoutComponent implements OnInit {
   isAdmin: boolean = false;
   isClient: boolean = false;
   isConnected: boolean = false;
+  init: boolean = true;
   constructor(private router: Router) {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -33,5 +34,6 @@ export class LayoutComponent implements OnInit {
     else{
       this.isAdmin = true;
     }
+    init: false;
   }
 }
