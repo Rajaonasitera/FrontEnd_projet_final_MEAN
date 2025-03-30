@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://servermean-production.up.railway.app:8080'
+  apiUrl: 'https://servermean-production.up.railway.app'
 };
