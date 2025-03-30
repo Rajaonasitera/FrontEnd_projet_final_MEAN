@@ -5,6 +5,8 @@ import { ClientComponent } from './client.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProduitsComponent } from './produits/produits.component';
 import { RendezVousComponent } from './rendez-vous/rendez-vous.component';
+import { ErrorComponent } from '../error/error.component';
+import { ClientAuthGuard } from '../guards/client-auth.guard';
 
 const routes: Routes = [
   {
@@ -12,11 +14,11 @@ const routes: Routes = [
     component: ClientComponent,
     children: [
       { path: '', redirectTo: 'service', pathMatch: 'full' },
-      { path: 'service', component: ServicesComponent },
-      { path: 'profile', component: ProfileComponent },
-      { path: 'produits', component: ProduitsComponent },
-      { path: 'rendezvous', component: RendezVousComponent },
-      { path: '**', redirectTo: 'errors/404' },
+      { path: 'service', component: ServicesComponent, canActivate: [ClientAuthGuard]},
+      { path: 'profile', component: ProfileComponent, canActivate: [ClientAuthGuard] },
+      { path: 'produits', component: ProduitsComponent, canActivate: [ClientAuthGuard] },
+      { path: 'rendezvous', component: RendezVousComponent, canActivate: [ClientAuthGuard] },
+      { path: '**', component: ErrorComponent, canActivate: [ClientAuthGuard] },
     ],
   },
 ];

@@ -1,0 +1,134 @@
+<div
+  id="main-content"
+  class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted flex w-full flex-col items-center justify-center">
+  <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+    <div class="bg-background mb-6 rounded-lg p-6 shadow-md">
+      <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <h2 class="text-foreground text-lg font-semibold">Liste des Rendez-vous</h2>
+        <div class="relative w-full md:w-64">
+          <input
+            type="search"
+            id="search"
+            class="bg-card border-border text-foreground block w-full rounded-lg border p-2.5 pl-10 text-sm"
+            placeholder="Rechercher un rendez-vous..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="appliquerFiltres()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ouvrirAjoutRendezvousModal()">Ajouter un Rendez-vous</button>
+    </div>
+  </div>
+
+  <div class="bg-background rounded-lg px-6 py-6 shadow-md" style="height: 500px;">
+    <div class="relative">
+        <table class="w-full table-auto">
+            <thead class="bg-muted/20 text-muted-foreground text-xs uppercase">
+                <tr>
+                    <th class="py-3 px-4 text-left">Client</th>
+                    <th class="py-3 px-4 text-left">Description</th>
+                    <th class="py-3 px-4 text-left">Date</th>
+                    <th class="py-3 px-4 text-left">Heure</th>
+                    <th class="py-3 px-4 text-left">Lieu</th>
+                    <th class="py-3 px-4 text-left">Etat</th>
+                    <th class="py-3 px-4 text-left">Personnel</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="w-full table-auto">
+                <tbody>
+                    <tr *ngFor="let rendezvous of rendezvousFilters" class="border-border hover:bg-card/50 border-b border-dashed">
+                        <td class="py-4 px-4 text-left">{{ rendezvous.client }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.description }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.date | date }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.heure | date:'shortTime' }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.lieu }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.etat }}</td>
+                        <td class="py-4 px-4 text-left">{{ rendezvous.personnel }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <button class="rounded-md bg-blue-500 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-600"
+                                (click)="voirDetails(rendezvous)">Voir détails</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedRendezvous" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Détails du Rendez-vous</h2>
+      <label class="block text-sm font-medium text-gray-700">Client</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedRendezvous.client" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedRendezvous.description" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedRendezvous.date" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Heure</label>
+      <input type="time" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedRendezvous.heure" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Lieu</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedRendezvous.lieu" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Etat</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="selectedRendezvous.etat" [disabled]="!isEditing">
+        <option value="Confirmé">Confirmé</option>
+        <option value="Annulé">Annulé</option>
+        <option value="En Attente">En Attente</option>
+      </select>
+
+      <label class="block text-sm font-medium text-gray-700">Personnel</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" [(ngModel)]="selectedRendezvous.personnel" [disabled]="!isEditing" />
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button *ngIf="!isEditing" class="bg-yellow-500 text-white px-4 py-2 rounded" (click)="isEditing = true">Modifier</button>
+        <button *ngIf="isEditing" class="bg-green-500 text-white px-4 py-2 rounded" (click)="enregistrerModification()">Enregistrer</button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded" (click)="supprimerRendezvous(selectedRendezvous)">Supprimer</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAjoutRendezvousModalOpen" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Ajouter un Rendez-vous</h2>
+      <label class="block text-sm font-medium text-gray-700">Client</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauRendezvous.client" />
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauRendezvous.description" />
+      
+      <label class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauRendezvous.date" />
+      
+      <label class="block text-sm font-medium text-gray-700">Heure</label>
+      <input type="time" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauRendezvous.heure" />
+      
+      <label class="block text-sm font-medium text-gray-700">Lieu</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauRendezvous.lieu" />
+      
+      <label class="block text-sm font-medium text-gray-700">Etat</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="nouveauRendezvous.etat">
+        <option value="Confirmé">Confirmé</option>
+        <option value="Annulé">Annulé</option>
+        <option value="En Attente">En Attente</option>
+      </select>
+      
+      <label class="block text-sm font-medium text-gray-700">Personnel</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" [(ngModel)]="nouveauRendezvous.personnel" />
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ajouterRendezvous()">Ajouter</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerAjoutRendezvousModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

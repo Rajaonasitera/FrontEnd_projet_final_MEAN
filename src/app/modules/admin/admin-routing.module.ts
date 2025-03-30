@@ -1,28 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
-import { RendezvousComponent } from './rendezvous/rendezvous.component';
-import { CommandeComponent } from './commande/commande.component';
-import { HistoriqueComponent } from './historique/historique.component';
-import { ProduitComponent } from './produit/produit.component';
-import { StockComponent } from './stock/stock.component';
-import { ClientComponent } from './client/client.component';
-import { AuthGuard } from '../guards/auth.guard';
+import { ListeClientsComponent } from './liste-clients/liste-clients.component';
+import { ListeProduitsComponent } from './liste-produits/liste-produits.component';
+import { ListeServicesComponent } from './liste-services/liste-services.component';
+import { ListeVoituresComponent } from './liste-voitures/liste-voitures.component';
+import { ListeRendezvousComponent } from './liste-rendezvous/liste-rendezvous.component';
+import { ErrorComponent } from '../error/error.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListeReparationsComponent } from './liste-reparations/liste-reparations.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'rendezvous', pathMatch: 'full' },
-      { path: 'rendezvous', component: RendezvousComponent },
-      { path: 'commande', component: CommandeComponent },
-      { path: 'historique', component: HistoriqueComponent },
-      { path: 'produit', component: ProduitComponent },
-      { path: 'stock', component: StockComponent },
-      { path: 'client', component: ClientComponent },
-      { path: '**', redirectTo: 'errors/404' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'liste-clients', component: ListeClientsComponent },
+      { path: 'liste-produits', component: ListeProduitsComponent },
+      { path: 'liste-services', component: ListeServicesComponent },
+      { path: 'liste-voitures', component: ListeVoituresComponent },
+      { path: 'liste-rendezvous', component: ListeRendezvousComponent },
+      { path: 'liste-reparations', component: ListeReparationsComponent },
+       { path: '**', component: ErrorComponent },
     ],
   },
 ];

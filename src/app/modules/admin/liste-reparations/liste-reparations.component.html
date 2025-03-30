@@ -1,0 +1,126 @@
+<div
+  id="main-content"
+  class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted flex w-full flex-col items-center justify-center">
+  <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+    <div class="bg-background mb-6 rounded-lg p-6 shadow-md">
+      <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <h2 class="text-foreground text-lg font-semibold">Liste des Réparations</h2>
+        <div class="relative w-full md:w-64">
+          <input
+            type="search"
+            id="search"
+            class="bg-card border-border text-foreground block w-full rounded-lg border p-2.5 pl-10 text-sm"
+            placeholder="Rechercher une réparation..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="appliquerFiltres()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ouvrirAjoutReparationModal()">Ajouter une Réparation</button>
+    </div>
+  </div>
+
+  <div class="bg-background rounded-lg px-6 py-6 shadow-md" style="height: 500px;">
+    <div class="relative">
+        <table class="w-full table-auto">
+            <thead class="bg-muted/20 text-muted-foreground text-xs uppercase">
+                <tr>
+                    <th class="py-3 px-4 text-left">Voiture</th>
+                    <th class="py-3 px-4 text-left">Description</th>
+                    <th class="py-3 px-4 text-left">Date</th>
+                    <th class="py-3 px-4 text-left">Produit</th>
+                    <th class="py-3 px-4 text-left">Etat</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="w-full table-auto">
+                <tbody>
+                    <tr *ngFor="let reparation of reparationsFilters" class="border-border hover:bg-card/50 border-b border-dashed">
+                        <td class="py-4 px-4 text-left">{{ reparation.voiture }}</td>
+                        <td class="py-4 px-4 text-left">{{ reparation.description }}</td>
+                        <td class="py-4 px-4 text-left">{{ reparation.date | date }}</td>
+                        <td class="py-4 px-4 text-left">{{ reparation.produit }}</td>
+                        <td class="py-4 px-4 text-left">{{ reparation.etat }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <button class="rounded-md bg-blue-500 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-600"
+                                (click)="voirDetails(reparation)">Voir détails</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedReparation" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Détails de la Réparation</h2>
+      <label class="block text-sm font-medium text-gray-700">Voiture</label>
+      <select class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedReparation.voiture" [disabled]="!isEditing">
+        <option value="Voiture A">Voiture A</option>
+        <option value="Voiture B">Voiture B</option>
+        <option value="Voiture C">Voiture C</option>
+      </select>
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedReparation.description" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedReparation.date" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Produit</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedReparation.produit" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Etat</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="selectedReparation.etat" [disabled]="!isEditing">
+        <option value="Confirmée">Confirmée</option>
+        <option value="Annulée">Annulée</option>
+        <option value="En Attente">En Attente</option>
+      </select>
+
+      <div class="mt-4 flex justify-end space-x-2">
+        <button *ngIf="!isEditing" class="bg-yellow-500 text-white px-4 py-2 rounded" (click)="isEditing = true">Modifier</button>
+        <button *ngIf="isEditing" class="bg-green-500 text-white px-4 py-2 rounded" (click)="enregistrerModification()">Enregistrer</button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded" (click)="supprimerReparation(selectedReparation)">Supprimer</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAjoutReparationModalOpen" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Ajouter une Réparation</h2>
+      <label class="block text-sm font-medium text-gray-700">Voiture</label>
+      <select class="w-full p-2 border rounded mb-2" [(ngModel)]="nouvelleReparation.voiture">
+        <option value="Voiture A">Voiture A</option>
+        <option value="Voiture B">Voiture B</option>
+        <option value="Voiture C">Voiture C</option>
+      </select>
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouvelleReparation.description" />
+      
+      <label class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouvelleReparation.date" />
+      
+      <label class="block text-sm font-medium text-gray-700">Produit</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouvelleReparation.produit" />
+      
+      <label class="block text-sm font-medium text-gray-700">Etat</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="nouvelleReparation.etat">
+        <option value="Confirmée">Confirmée</option>
+        <option value="Annulée">Annulée</option>
+        <option value="En Attente">En Attente</option>
+      </select>
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ajouterReparation()">Ajouter</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerAjoutReparationModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

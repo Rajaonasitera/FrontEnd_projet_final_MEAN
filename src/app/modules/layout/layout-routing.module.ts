@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ClientComponent } from '../client/client.component';
 import { AdminComponent } from '../admin/admin.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,12 +26,12 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('../uikit/uikit.module').then((m) => m.UikitModule),
   },
-  { path: '', redirectTo: 'client', pathMatch: 'full' },
-  { path: '**', redirectTo: 'error/404' },
+  { path: '', pathMatch: 'full', component: LayoutComponent, canActivate: [AuthGuard]},
+  { path: '**', redirectTo: 'error' },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class LayoutRoutingModule {}

@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Menu } from 'src/app/core/constants/menu';
 import { MenuItem, SubMenuItem } from 'src/app/core/models/menu.model';
+import { ServiceService } from 'src/app/utiles/service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +14,22 @@ export class MenuService implements OnDestroy {
   private _showMobileMenu = signal(false);
   private _pagesMenu = signal<MenuItem[]>([]);
   private _subscription = new Subscription();
+  private isClient = true;
+  private isAdmin = false;
+  private isMeca = false;
 
-  constructor(private router: Router) {
-    this._pagesMenu.set(Menu.pages);
+  constructor(private router: Router, private service: ServiceService) {
+    const token = localStorage.getItem("Token"); 
+    if (token) {
+     this.setUserType(token);
+    }
+    this._pagesMenu.set(
+      Menu.pages.filter(page => 
+        (this.isAdmin && page.isAdmin) ||
+        (this.isClient && page.isClient) ||
+        (this.isMeca && page.isMeca)
+      )
+    );
   
     let sub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -43,6 +58,27 @@ export class MenuService implements OnDestroy {
     });
   
     this._subscription.add(sub);
+  }
+
+  async setUserType(token: string) {
+    try {
+      const type = await this.getType();
+  
+      this.isClient = String(type) === "1";
+      this.isAdmin = String(type) === "100";
+      this.isMeca = String(type) === "50";
+    } catch (error) {
+      console.error("Erreur lors de la récupération du type d'utilisateur:", error);
+    }
+  }
+
+  async getType(): Promise<any>{
+    try {
+      const type = await this.service.getType();
+      return type;
+    } catch (error) {
+      
+    }
   }
 
   get showSideBar() {

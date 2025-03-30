@@ -11,32 +11,32 @@
       <div class="relative">
         <input 
           type="text" 
-          id="telephone" 
+          id="email" 
+          formControlName="email"
           class="peer w-full border border-blue-500 rounded-md p-2 pt-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder=" " 
         />
         <label 
-          for="telephone" 
+          for="email" 
           class="absolute left-2 top-1 text-gray-500 text-sm bg-white px-1 transition-all scale-95"
         >
-          Numéro de téléphone
+          Email
         </label>
       </div>      
-      <div *ngIf="submitted && f['telephone'].errors" class="is__invalid-error">
-        <div *ngIf="f['telephone'].errors['required']">Champ requis</div>
-        <div *ngIf="f['telephone'].errors['pattern']">Numéro invalide (ex: 06XXXXXXXX)</div>
+      <div *ngIf="submitted && f['email'].errors" class="is__invalid-error">
+        <div *ngIf="f['email'].errors['required']">Champ requis</div>
       </div>
     </div>
   
     <div class="form__group">
       <div class="relative">
         <input
-          [type]="passwordTextType ? 'text' : 'password'"
+          [type]="showPassword ? 'text' : 'password'"
           id="password"
+          formControlName="password"
           [ngClass]="{ 'border-red-500': submitted && f['password'].errors }"
           class="peer block w-full border border-gray-300 rounded-md p-2 pt-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder=" "
-          formControlName="password"
         />
         
         <label
@@ -45,9 +45,11 @@
           Mot de passe
         </label>
       
-        <span class="absolute top-4 right-3 cursor-pointer text-gray-500 hover:text-gray-700" (click)="togglePasswordTextType()">
+        <span class="absolute top-4 right-3 cursor-pointer text-gray-500 hover:text-gray-700" 
+              (click)="togglePasswordVisibility()" 
+              aria-label="Afficher/Masquer le mot de passe">
           <svg-icon
-            [src]="!passwordTextType ? 'assets/icons/heroicons/outline/eye-off.svg' : 'assets/icons/heroicons/outline/eye.svg'"
+            [src]="!showPassword ? 'assets/icons/heroicons/outline/eye-off.svg' : 'assets/icons/heroicons/outline/eye.svg'"
             [svgClass]="'h-5 w-5'">
           </svg-icon>
         </span>
@@ -60,10 +62,10 @@
   </div>  
 
   <div class="mb-2 flex items-center justify-between space-x-3">
-    <div class="flex items-center">
-      <input id="remember-me" name="remember-me" type="checkbox" />
+    <!-- <div class="flex items-center">
+      <input id="remember-me" type="checkbox" formControlName="rememberMe" />
       <label for="remember-me" class="text-muted-foreground ml-2 block text-sm"> Se souvenir de moi </label>
-    </div>
+    </div> -->
 
     <app-button routerLink="/auth/mot-de-passe-oublie" impact="none" tone="primary" shape="rounded" size="small">
       Mot de passe oublié ?
@@ -71,7 +73,9 @@
   </div>
 
   <div>
-    <app-button full impact="bold" tone="primary" shape="rounded" size="medium">Se connecter</app-button>
+    <app-button full impact="bold" tone="primary" shape="rounded" size="medium">
+      Se connecter
+    </app-button>
   </div>
 
   <div class="text-muted-foreground flex items-center text-sm">

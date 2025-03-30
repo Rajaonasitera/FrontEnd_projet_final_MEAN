@@ -5,6 +5,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SubMenuItem } from 'src/app/core/models/menu.model';
 import { MenuService } from '../../../services/menu.service';
 import { SidebarSubmenuComponent } from '../sidebar-submenu/sidebar-submenu.component';
+import { Menu } from 'src/app/core/constants/menu';
 
 @Component({
   selector: 'app-sidebar-menu',
@@ -23,10 +24,11 @@ import { SidebarSubmenuComponent } from '../sidebar-submenu/sidebar-submenu.comp
   ],
 })
 export class SidebarMenuComponent implements OnInit {
-  constructor(public menuService: MenuService) {}
-
-  public toggleMenu(subMenu: SubMenuItem) {
-    this.menuService.toggleMenu(subMenu);
+  page: any[] = [];
+  constructor(public menuService: MenuService) {
+    this.page = Menu.pages.filter(page => page.isAdmin);
+    console.log(this.page, "page");
+    
   }
 
   ngOnInit(): void {}

@@ -4,6 +4,9 @@ export interface MenuItem {
   separator?: boolean;
   selected?: boolean;
   active?: boolean;
+  isAdmin?: boolean;
+  isClient?: boolean;
+  isMeca?: boolean;
   // items: Array<SubMenuItem>;
 }
 
