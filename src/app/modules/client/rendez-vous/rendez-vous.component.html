@@ -1,37 +1,64 @@
-<div id="main-content" class="flex flex-col items-center justify-center w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
-    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
-        <form class="space-y-6" (ngSubmit)="onSubmit()">
-            <div class="text-center">
-                <h2 class="text-gray-900 text-3xl font-bold">Prise de Rendez-vous</h2>
-                <p class="text-gray-600 text-sm mt-2">Remplissez le formulaire pour réserver votre rendez-vous.</p>
-            </div>
-
-            <div class="form__group">
-                <label for="dateRdv" class="block text-sm font-medium text-gray-700">Date du Rendez-vous</label>
-                <input type="date" id="dateRdv" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" formControlName="dateRdv" required />
-            </div>
-
-            <div class="form__group">
-                <label for="voiture" class="block text-sm font-medium text-gray-700">Véhicule à Réparer</label>
-                <input type="text" id="voiture" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Peugeot 208" formControlName="voiture" required />
-            </div>
-
-            <div class="form__group">
-                <label for="service" class="block text-sm font-medium text-gray-700">Service à Effectuer</label>
-                <select id="service" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" formControlName="service" required>
-                    <option value="">Sélectionnez un service</option>
-                    <option *ngFor="let service of services" [value]="service.id">
-                        {{ service.nom }}
-                    </option>
-                </select>
-                
-            </div>
-
-            <div>
-                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md transition-all duration-300">
-                    Valider la demande de RDV
-                </button>  
-            </div>
-        </form>
+<div id="main-content" class=" bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden">
+      <div class="bg-blue-600 p-6 text-white">
+        <h2 class="text-3xl font-bold text-center">Prise de Rendez-vous</h2>
+        <p class="text-blue-100 text-center mt-2">Planifiez votre visite en quelques étapes simples</p>
+      </div>
+  
+      <form [formGroup]="rendezVousForm" class="space-y-6 p-8" (ngSubmit)="onSubmit()">
+        <div class="form__group">
+          <label for="description" class="block text-gray-700 font-medium mb-2">
+            <i class="fas fa-info-circle mr-2 text-blue-500"></i>Description
+          </label>
+          <textarea type="text" id="description" rows="3"
+                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                 placeholder="Brève description du problème" 
+                 formControlName="description" required></textarea>
+        </div>
+  
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="date" class="block text-gray-700 font-medium mb-2">
+              <i class="fas fa-calendar-day mr-2 text-blue-500"></i>Date
+            </label>
+            <input type="date" id="date" 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                   formControlName="date" required
+                   min="{{minDate | date:'yyyy-MM-dd'}}">
+          </div>
+          
+          <div>
+            <label for="heure" class="block text-gray-700 font-medium mb-2">
+              <i class="fas fa-clock mr-2 text-blue-500"></i>Heure
+            </label>
+            <select id="heure" 
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                    formControlName="heure" required>
+              <option value="">Sélectionnez une heure</option>
+              <option *ngFor="let timeSlot of availableTimeSlots" [value]="timeSlot">
+                {{ timeSlot }}
+              </option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form__group">
+          <label for="lieu" class="block text-gray-700 font-medium mb-2">
+            <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Lieu
+          </label>
+          <input type="text" id="lieu" 
+                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                 placeholder="Adresse du garage ou lieu de rendez-vous"
+                 formControlName="lieu" required>
+        </div>
+  
+        <div class="pt-4">
+          <button type="submit" 
+                  class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+            <i class="fas fa-calendar-check mr-2"></i>
+            Confirmer le rendez-vous
+          </button>
+        </div>
+      </form>
     </div>
-</div>
+  </div>

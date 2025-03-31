@@ -16,7 +16,7 @@ export class ClientAuthGuard implements CanActivate {
       const type = await this.service.getType(); 
       if (type !== 1) {
         this.error.setError("Oops, Vous n'avez pas accès!")
-        this.router.navigate(['/errors']);
+        this.router.navigate(['/auth']);
         return false;
       }
     }

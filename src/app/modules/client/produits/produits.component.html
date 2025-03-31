@@ -1,13 +1,54 @@
-<div id="main-content" class="flex flex-col items-center justify-center w-full">
-    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
-        <h1 class="text-3xl font-bold text-center mb-10 text-yellow-500">Boutique Mécanique</h1>
-        <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div nft-dual-card [nft]="nft[0]" class="md:col-span-2 transition-all transform hover:scale-105 hover:shadow-2xl"></div>
-            <div nft-single-card [nft]="nft[1]" class="transition-all transform hover:scale-105 hover:shadow-2xl"></div>
-            <div nft-single-card [nft]="nft[2]" class="transition-all transform hover:scale-105 hover:shadow-2xl"></div>
-            <div nft-single-card [nft]="nft[2]" class="transition-all transform hover:scale-105 hover:shadow-2xl"></div>
-            <div nft-single-card [nft]="nft[2]" class="transition-all transform hover:scale-105 hover:shadow-2xl"></div>
-            <div nft-single-card [nft]="nft[2]" class="transition-all transform hover:scale-105 hover:shadow-2xl"></div>
+<div class="flex justify-between items-center p-4 bg-gray-100">
+    <h1 class="text-2xl font-bold text-yellow-500">Boutique Mécanique</h1>
+
+    <button class="relative bg-gray-800 text-white p-3 rounded-full" (click)="openPanier()">
+        🛒
+        <span *ngIf="getTotalItems() > 0" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2">
+            {{ getTotalItems() }}
+        </span>
+    </button>
+</div>
+
+<div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div *ngFor="let produit of produits" class="bg-white shadow-lg rounded-lg p-4 flex flex-col" style="height: 200px;">
+        <h2 class="text-xl font-bold">{{ produit.designation }}</h2>
+        <p class="text-gray-600">{{ produit.description }}</p>
+        <p class="text-green-500 font-semibold">{{ produit.prixvente }} Ar</p>
+        <button (click)="openModal(produit)" class="mt-auto bg-blue-500 text-white px-4 py-2 rounded">
+            Acheter
+        </button>
+    </div>
+</div>
+
+<div *ngIf="selectedProduit" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-2xl font-bold">{{ selectedProduit.designation }}</h2>
+        <p>{{ selectedProduit.description }}</p>
+        <p class="text-green-500 font-semibold">Prix: {{ selectedProduit.prixvente }} Ar</p>
+        <label class="block mt-4">Quantité:</label>
+        <input type="number" [(ngModel)]="quantity" min="1" class="w-full p-2 border rounded">
+        <div class="mt-4 flex justify-end">
+            <button (click)="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Annuler</button>
+            <button (click)="ajouterAuPanier()" class="bg-green-500 text-white px-4 py-2 rounded">Ajouter au Panier</button>
         </div>
     </div>
 </div>
+
+<div *ngIf="panierOuvert" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-2xl font-bold">Panier</h2>
+        <ul>
+            <li *ngFor="let item of panier" class="flex justify-between border-b p-2">
+                <span>{{ item.produit.designation }} ({{ item.quantity }})</span>
+                <span class="text-green-500 font-semibold">{{ item.produit.prixvente * item.quantity }} Ar</span>
+            </li>
+        </ul>
+        <label class="block mt-4">Adresse de livraison:</label>
+        <input type="text" [(ngModel)]="adresse" class="w-full p-2 border rounded">
+        <div class="mt-4 flex justify-end">
+            <button (click)="closePanier()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Fermer</button>
+            <button (click)="confirmerAchat()" class="bg-green-500 text-white px-4 py-2 rounded">Confirmer</button>
+        </div>
+    </div>
+</div>
+

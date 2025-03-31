@@ -1,16 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThemeService } from '../../../../../core/services/theme.service';
 import { ClickOutsideDirective } from '../../../../../shared/directives/click-outside.directive';
+import { ServiceService } from 'src/app/utiles/service.service';
 
 @Component({
   selector: 'app-profile-menu',
   templateUrl: './profile-menu.component.html',
   styleUrls: ['./profile-menu.component.css'],
-  imports: [ClickOutsideDirective, NgClass, RouterLink, AngularSvgIconModule],
+  imports: [ClickOutsideDirective, NgClass, RouterLink, AngularSvgIconModule, CommonModule],
   animations: [
     trigger('openClose', [
       state(
@@ -36,9 +37,11 @@ import { ClickOutsideDirective } from '../../../../../shared/directives/click-ou
 })
 export class ProfileMenuComponent implements OnInit {
   public isOpen = false;
+  public isConnected = false;
+  public user: any = null;
   public profileMenu = [
     {
-      title: 'Your Profile',
+      title: 'Profil',
       icon: './assets/icons/heroicons/outline/user-circle.svg',
       link: '/client/profile',
     },
@@ -47,64 +50,40 @@ export class ProfileMenuComponent implements OnInit {
       icon: './assets/icons/heroicons/outline/cog-6-tooth.svg',
       link: '/client/rendezvous',
     },
-    {
-      title: 'Log out',
-      icon: './assets/icons/heroicons/outline/logout.svg',
-      link: '/auth',
-    },
   ];
+  constructor(public themeService: ThemeService, private router: Router, private service: ServiceService) { 
+    console.log([this.isConnected]);
+    
+    const token = localStorage.getItem("Token");
+    if (token) {
+      this.isConnected = true;
+    }}
 
-  // public themeColors = [
-  //   {
-  //     name: 'base',
-  //     code: '#e11d48',
-  //   },
-  //   {
-  //     name: 'yellow',
-  //     code: '#f59e0b',
-  //   },
-  //   {
-  //     name: 'green',
-  //     code: '#22c55e',
-  //   },
-  //   {
-  //     name: 'blue',
-  //     code: '#3b82f6',
-  //   },
-  //   {
-  //     name: 'orange',
-  //     code: '#ea580c',
-  //   },
-  //   {
-  //     name: 'red',
-  //     code: '#cc0022',
-  //   },
-  //   {
-  //     name: 'violet',
-  //     code: '#6d28d9',
-  //   },
-  // ];
+  ngOnInit(): void {
+    if (localStorage.getItem("Token")) {
+    this.fetch();  
+      
+    }
+  }
 
-  // public themeMode = ['light', 'dark'];
-
-  constructor(public themeService: ThemeService) {}
-
-  ngOnInit(): void {}
+  async fetch() {
+    try {
+    const id = await this.service.getIdClient();
+    this.user = await this.service.getClient(id);
+    console.log([this.user]);
+    
+    } catch (error) {
+      this.router.navigate(["error/"]) 
+    }
+  }
 
   public toggleMenu(): void {
     this.isOpen = !this.isOpen;
   }
 
-  // toggleThemeMode() {
-  //   this.themeService.theme.update((theme) => {
-  //     const mode = !this.themeService.isDark ? 'dark' : 'light';
-  //     return { ...theme, mode: mode };
-  //   });
-  // }
+  deconnecter() {
+    localStorage.removeItem("Token");
+    this.router.navigate(['/auth']);
+  }
 
-  // toggleThemeColor(color: string) {
-  //   this.themeService.theme.update((theme) => {
-  //     return { ...theme, color: color };
-  //   });
-  // }
 }

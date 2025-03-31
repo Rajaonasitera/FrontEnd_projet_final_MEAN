@@ -11,7 +11,6 @@
       
         <div class="py-16 px-6 text-center" style="margin-top: 100px; margin-bottom: 100px;">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-              <!-- Texte à gauche -->
               <div class="md:w-1/2 text-left">
                 <h2 class="text-3xl font-bold mb-4">Pourquoi choisir Garage Auto ?</h2>
                 <p class="text-gray-700 leading-relaxed" style="margin-top: 10px;">
@@ -23,71 +22,155 @@
                   </a>
                 </div>
               </div>
-              
-              <!-- Image à droite -->
               <div class="md:w-1/2 flex justify-center">
-                <img src="../../../../assets/images/garage.jpg" 
+                <img src="../../../../assets/images/garage1.jpg" 
                      alt="Garage Auto" 
-                     class="rounded-lg shadow-lg w-full max-w-sm">
+                     class=" shadow-lg w-full max-w-sm">
               </div>
             </div>
           </div>
-  
-      <!-- 🛠️ Services -->
-      <div class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div nft-dual-card [nft]="nft[0]" class="md:col-span-2"></div>
-        <div nft-single-card [nft]="nft[1]"></div>
-        <div nft-single-card [nft]="nft[2]"></div>
-        <div nft-single-card [nft]="nft[2]"></div>
-        <div nft-single-card [nft]="nft[2]"></div>
-        <div nft-single-card [nft]="nft[2]"></div>
-      </div>
-  
-      <!-- ⭐ Section Avis Clients -->
-<div class="py-16 text-center" style="margin-top: 60px; margin-bottom: 100px;">
-    <h2 class="text-3xl font-bold mb-8 text-gray-800" style="margin:50px;">Avis de nos clients</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
-      <div class="p-8">
-        <p class="text-gray-600 italic">"Super garage ! Service rapide et équipe très sympa. Je recommande fortement !"</p>
-        <div class="mt-4 flex items-center justify-center">
-          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
-          <div>
-            <p class="font-semibold text-gray-900">Jean Dupont</p>
-            <p class="text-yellow-500">★★★★★</p>
+      <div class="mt-16 text-center">
+        <h2 class="text-3xl font-bold mb-12">Nos Récentes Réalisations</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="card">
+            <img src="../../../../assets/images/peugeot.jpg" alt="Voiture réparée 1" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="p-4">
+              <h3 class="font-bold">Restauration complète</h3>
+              <p class="text-sm text-gray-600">Peugeot 205 GTI</p>
+            </div>
+          </div>
+          <div class="card">
+            <img src="../../../../assets/images/clio.jpg" alt="Voiture réparée 2" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="p-4">
+              <h3 class="font-bold">Révision complète</h3>
+              <p class="text-sm text-gray-600">Renault Clio</p>
+            </div>
+          </div>
+          <div class="card">
+            <img src="../../../../assets/images/citroen.jpg" alt="Voiture réparée 3" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="p-4">
+              <h3 class="font-bold">Carrosserie</h3>
+              <p class="text-sm text-gray-600">Citroën C4</p>
+            </div>
+          </div>
+          <div class="card">
+            <img src="../../../../assets/images/Volkswagen.jpeg" alt="Voiture réparée 4" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="p-4">
+              <h3 class="font-bold">Préparation contrôle technique</h3>
+              <p class="text-sm text-gray-600">Volkswagen Golf</p>
+            </div>
           </div>
         </div>
       </div>
-      
-  
-      <div class="p-8">
-        <p class="text-gray-600 italic">"Un excellent garage avec des prix abordables et un service impeccable."</p>
-        <div class="mt-4 flex items-center justify-center">
-          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
-          <div>
-            <p class="font-semibold text-gray-900">Sophie Martin</p>
-            <p class="text-yellow-500">★★★★★</p>
+
+      <div class="mt-16 text-center" id="services">
+        <h2 class="text-3xl font-bold mb-12">Nos Services</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div *ngFor="let service of services" class="service-card">
+            <div class="p-6">
+              <div class="text-4xl mb-4">🛠️</div>
+              <h3 class="text-xl font-bold mb-2">{{service.designation}}</h3>
+              <p class="text-gray-600">{{service.description}}</p>
+              <div class="mt-4 font-bold text-primary">{{service.prixvente}} Ar</div>
+            </div>
           </div>
         </div>
       </div>
-      
-  
-      <div class="p-8">
-        <p class="text-gray-600 italic">"Des mécaniciens professionnels et honnêtes. Très satisfait du service !"</p>
-        <div class="mt-4 flex items-center justify-center">
-          <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
-          <div>
-            <p class="font-semibold text-gray-900">Michel Leroy</p>
-            <p class="text-yellow-500">★★★★★</p>
+
+      <div class="mt-16 py-12 px-6 bg-gray-50 ">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="md:w-1/2">
+            <img src="../../../../assets/images/mecanicien.jpg" alt="Service en ligne" class=" shadow-lg w-full">
+          </div>
+          <div class="md:w-1/2">
+            <h2 class="text-3xl font-bold mb-4">Notre service en ligne</h2>
+            <p class="text-gray-700 mb-4">
+              Garage Auto révolutionne la réparation automobile avec son service en ligne. Commandez une intervention et nos mécaniciens se déplacent directement à votre domicile ou sur votre lieu de travail.
+            </p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start">
+                <span class="mr-2">✓</span>
+                <span>Diagnostic à distance possible via vidéo</span>
+              </li>
+              <li class="flex items-start">
+                <span class="mr-2">✓</span>
+                <span>Devis instantané en ligne</span>
+              </li>
+              <li class="flex items-start">
+                <span class="mr-2">✓</span>
+                <span>Mécaniciens certifiés</span>
+              </li>
+              <li class="flex items-start">
+                <span class="mr-2">✓</span>
+                <span>Paiement sécurisé en ligne</span>
+              </li>
+            </ul>
+            <a href="/auth/sign-in" class="btn">Essayer notre service en ligne</a>
           </div>
         </div>
       </div>
-      
+      <div class="mt-16">
+        <h2 class="text-3xl font-bold mb-8 text-center">Nous trouver</h2>
+        <div class=" p-6  shadow-lg">
+          <div class="flex flex-col md:flex-row gap-8">
+            <div class="md:w-1/2">
+              <h3 class="text-xl font-bold mb-4">Notre adresse</h3>
+              <p class="mb-4">Lot II 115 Ter HJ Analakely</p>
+              <p class="mb-2"><strong>Horaires :</strong></p>
+              <p>Lundi-Vendredi : 8h-19h<br>Samedi : 9h-17h</p>
+              <p class="mt-4"><strong>Téléphone :</strong> 033 11 452 50</p>
+            </div>
+            <div class="md:w-1/2 h-64">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9916256937595!2d2.292292615509614!3d48.858370079287475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sTour%20Eiffel!5e0!3m2!1sfr!2sfr!4v1623254016833!5m2!1sfr!2sfr" 
+                      width="100%" 
+                      height="100%" 
+                      style="border:0;" 
+                      allowfullscreen="" 
+                      loading="lazy"
+                      class="">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="py-16 text-center" style="margin-top: 60px; margin-bottom: 100px;">
+          <h2 class="text-3xl font-bold mb-8 text-gray-800" style="margin:50px;">Avis de nos clients</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
+            <div class="p-8">
+              <p class="text-gray-600 italic">"Super garage ! Service rapide et équipe très sympa. Je recommande fortement !"</p>
+              <div class="mt-4 flex items-center justify-center">
+                <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+                <div>
+                  <p class="font-semibold text-gray-900">Jean Dupont</p>
+                  <p class="text-yellow-500">★★★★★</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="p-8">
+              <p class="text-gray-600 italic">"Un excellent garage avec des prix abordables et un service impeccable."</p>
+              <div class="mt-4 flex items-center justify-center">
+                <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+                <div>
+                  <p class="font-semibold text-gray-900">Sophie Martin</p>
+                  <p class="text-yellow-500">★★★★★</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="p-8">
+              <p class="text-gray-600 italic">"Des mécaniciens professionnels et honnêtes. Très satisfait du service !"</p>
+              <div class="mt-4 flex items-center justify-center">
+                <img src="../../../../assets/images/img-01.jpg" class="w-12 h-12 rounded-full mr-3">
+                <div>
+                  <p class="font-semibold text-gray-900">Michel Leroy</p>
+                  <p class="text-yellow-500">★★★★★</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
-  
-  
-    </div>
-  </div>
-  
 </div>
-  

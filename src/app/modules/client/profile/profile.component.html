@@ -1,78 +1,202 @@
 <div id="main-content" class="flex flex-col items-center justify-center w-full scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
-    <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
-  
-      <div class="flex items-center gap-4 bg-card p-6 rounded-lg shadow-md">
-        <img class="w-16 h-16 rounded-full border-2 border-muted" src="../../../../assets/images/img-01.jpg" alt="Photo de profil">
-        <div>
-          <h2 class="text-lg font-bold text-foreground">John Doe</h2>
-          <p class="text-sm text-muted-foreground">Client fidèle depuis 2021</p>
-        </div>
+  <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+
+    <div class="flex items-center gap-4 bg-card p-6 rounded-lg shadow-md">
+      <img class="w-16 h-16 rounded-full border-2 border-muted" src="../../../../assets/images/img-01.jpg" alt="Photo de profil">
+      <div>
+        <h2 class="text-lg font-bold text-foreground">John Doe</h2>
+        <p class="text-sm text-muted-foreground">Client fidèle depuis 2021</p>
       </div>
-  
-      <div class="mt-6 rounded-lg bg-background px-8 py-8 shadow-md">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-semibold text-foreground">Suivi des Services</h3>
-          <button class="rounded-md bg-card px-4 py-2.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground">
-            Voir l'historique
+    </div>
+
+    <div class="mt-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-foreground">Suivi des Services</h3>
+      </div>
+    
+      <div class="relative overflow-x-auto">
+        <table *ngIf="suiviRendezVous.length > 0; else noRendezVous" class="w-full table-auto">
+          <thead class="text-xs uppercase text-muted-foreground">
+            <tr>
+              <th class="py-3 text-left">Description</th>
+              <th class="py-3 text-right">Date</th>
+              <th class="py-3 text-right">Heure</th>
+              <th class="py-3 text-right">Lieu</th>
+              <th class="py-3 text-right">Remarque</th>
+              <th class="py-3 text-right">État</th>
+              <th class="py-3 text-right">Personnel</th>
+              <th class="py-3 text-right">Détails</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rdv of suiviRendezVous" class="border-b border-dashed border-border hover:bg-card">
+              <td class="py-3 text-left">{{ rdv.description }}</td>
+              <td class="py-3 text-right">{{ rdv.date | date: 'dd/MM/yyyy' }}</td>
+              <td class="py-3 text-right">{{ rdv.heure }}</td>
+              <td class="py-3 text-right">{{ rdv.lieu }}</td>
+              <td class="py-3 text-right">{{ rdv.remarque }}</td>
+              <td class="py-3 text-right">
+                <span [ngClass]="{
+                  'text-green-500': rdv.etat === 'Terminé',
+                  'text-yellow-500': rdv.etat === 'En cours',
+                  'text-red-500': rdv.etat === 'En attente'
+                }">
+                  {{ rdv.etat }}
+                </span>
+              </td>
+              <td class="py-3 text-right">{{ rdv.personnel }}</td>
+              <td class="py-3 text-right">
+                <button class="px-4 py-2 bg-primary text-white rounded-lg" (click)="afficherDetailsRendezVous(rdv)">Voir</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noRendezVous>
+          <div class="bg-card p-6 rounded-lg shadow-md text-center">
+            <p class="text-muted-foreground">Aucun rendez-vous enregistré</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>      
+
+    <div class="mt-8 mb-4">
+      <h3 class="text-lg font-semibold text-foreground">Historique des Paniers</h3>
+    </div>
+    
+    <div class="relative overflow-x-auto">
+      <table *ngIf="paniersClient.length > 0; else noPaniers" class="w-full table-auto">
+        <thead class="text-xs uppercase text-muted-foreground">
+          <tr>
+            <th class="py-3 text-left">Date du Panier</th>
+            <th class="py-3 text-right">Adresse de livraison</th>
+            <th class="py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let panier of paniersClient" class="border-b border-dashed border-border hover:bg-card">
+            <td class="py-3 text-left">{{ panier.daty | date: 'dd/MM/yyyy' }}</td>
+            <td class="py-3 text-right">{{ panier.adresseLivraison}}</td>
+            <td class="py-3 text-right">
+              <button class="px-4 py-2 bg-primary text-white rounded-lg" (click)="afficherDetails(panier)">
+                Détails
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noPaniers>
+        <div class="bg-card p-6 rounded-lg shadow-md text-center">
+          <p class="text-muted-foreground">Aucun panier enregistré</p>
+        </div>
+      </ng-template>
+    </div>
+    
+    <!-- Modal for cart details -->
+    <div *ngIf="panierSelectionne" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg w-3/4 max-w-2xl p-6">
+        <h4 class="text-xl font-semibold mb-4">Détails du Panier - {{ panierSelectionne.date | date: 'dd/MM/yyyy' }}</h4>
+        <table class="w-full table-auto mb-4">
+          <thead class="text-xs uppercase text-muted-foreground">
+            <tr>
+              <th class="py-2 text-left">Produit</th>
+              <th class="py-2 text-right">Prix</th>
+              <th class="py-2 text-right">Quantité</th>
+              <th class="py-2 text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of panierSelectionneDetails" class="border-b border-dashed border-border">
+              <td class="py-2 text-left">{{ detail.produitId.designation }}</td>
+              <td class="py-2 text-right">{{ detail.produitId.prixvente}} Ar</td>
+              <td class="py-2 text-right">{{ detail.qte }}</td>
+              <td class="py-2 text-right">{{ (detail.produitId.prixvente * detail.qte)}} Ar</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-right font-semibold text-lg mb-4">
+          Total: {{ getTotal(panierSelectionneDetails) }} Ar 
+        </div>
+        <div class="flex justify-end gap-4">
+          <button class="px-4 py-2 bg-gray-500 text-white rounded-lg" (click)="fermerModal()">Fermer</button>
+          <button class="px-4 py-2 bg-green-600 text-white rounded-lg" (click)="genererFacture(panierSelectionne,panierSelectionneDetails)">
+            Générer Facture
           </button>
         </div>
-  
-        <div class="relative overflow-x-auto">
-          <table class="w-full table-auto">
+      </div>
+    </div>
+    
+    <!-- Modal for rendezvous details -->
+    <div *ngIf="rendezVousSelectionne" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg w-3/4 max-w-2xl p-6">
+        <h4 class="text-xl font-semibold mb-4">Détails du Rendez-vous - {{ rendezVousSelectionne.date | date: 'dd/MM/yyyy' }}</h4>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <p class="font-medium">Description:</p>
+            <p>{{ rendezVousSelectionne.description }}</p>
+          </div>
+          <div>
+            <p class="font-medium">Heure:</p>
+            <p>{{ rendezVousSelectionne.heure }}</p>
+          </div>
+          <div>
+            <p class="font-medium">Lieu:</p>
+            <p>{{ rendezVousSelectionne.lieu }}</p>
+          </div>
+          <div>
+            <p class="font-medium">État:</p>
+            <p [ngClass]="{
+              'text-green-500': rendezVousSelectionne.etat === 'Terminé',
+              'text-yellow-500': rendezVousSelectionne.etat === 'En cours',
+              'text-red-500': rendezVousSelectionne.etat === 'En attente'
+            }">
+              {{ rendezVousSelectionne.etat }}
+            </p>
+          </div>
+          <div>
+            <p class="font-medium">Personnel:</p>
+            <p>{{ rendezVousSelectionne.personnel }}</p>
+          </div>
+          <div>
+            <p class="font-medium">Remarque:</p>
+            <p>{{ rendezVousSelectionne.remarque || 'Aucune remarque' }}</p>
+          </div>
+        </div>
+        
+        <h5 class="text-lg font-semibold mb-2">Réparations effectuées</h5>
+        <div *ngIf="rendezVousReparations.length > 0; else noReparations">
+          <table class="w-full table-auto mb-4">
             <thead class="text-xs uppercase text-muted-foreground">
               <tr>
-                <th class="py-3 text-left">Service</th>
-                <th class="py-3 text-right">Statut</th>
-                <th class="py-3 text-right">Date du Rendez-vous</th>
-                <th class="py-3 text-right">Détails</th>
+                <th class="py-2 text-left">Description</th>
+                <th class="py-2 text-right">Prix</th>
+                <th class="py-2 text-right">Durée</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let service of suiviServices" class="border-b border-dashed border-border hover:bg-card">
-                <td class="py-3 text-left">{{ service.nom }}</td>
-                <td class="py-3 text-right">
-                  <span [ngClass]="{
-                    'text-green-500': service.statut === 'Terminé',
-                    'text-yellow-500': service.statut === 'En cours',
-                    'text-red-500': service.statut === 'En attente'
-                  }">
-                    {{ service.statut }}
-                  </span>
-                </td>
-                <td class="py-3 text-right">{{ service.dateRdv | date: 'dd/MM/yyyy' }}</td>
-                <td class="py-3 text-right">
-                  <button class="text-blue-500 hover:underline">Voir</button>
-                </td>
+              <tr *ngFor="let reparation of rendezVousReparations" class="border-b border-dashed border-border">
+                <td class="py-2 text-left">{{ reparation.description }}</td>
+                <td class="py-2 text-right">{{ reparation.prix }} Ar</td>
+                <td class="py-2 text-right">{{ reparation.duree }} heures</td>
               </tr>
             </tbody>
           </table>
+          <div class="text-right font-semibold text-lg mb-4">
+            Total: {{ getTotalReparations(rendezVousReparations) }} Ar 
+          </div>
         </div>
-  
-        <div class="mt-8 mb-4 flex items-center justify-between">
-          <h3 class="text-lg font-semibold text-foreground">Produits Achetés</h3>
-        </div>
-  
-        <div class="relative overflow-x-auto">
-          <table class="w-full table-auto">
-            <thead class="text-xs uppercase text-muted-foreground">
-              <tr>
-                <th class="py-3 text-left">Produit</th>
-                <th class="py-3 text-right">Prix</th>
-                <th class="py-3 text-right">Quantité</th>
-                <th class="py-3 text-right">Date d'achat</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let produit of produitsAchetes" class="border-b border-dashed border-border hover:bg-card">
-                <td class="py-3 text-left">{{ produit.nom }}</td>
-                <td class="py-3 text-right">{{ produit.prix | currency:'EUR' }}</td>
-                <td class="py-3 text-right">{{ produit.quantite }}</td>
-                <td class="py-3 text-right">{{ produit.dateAchat | date: 'dd/MM/yyyy' }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <ng-template #noReparations>
+          <p class="text-muted-foreground mb-4">Aucune réparation enregistrée pour ce rendez-vous</p>
+        </ng-template>
+        
+        <div class="flex justify-end gap-4">
+          <button class="px-4 py-2 bg-gray-500 text-white rounded-lg" (click)="fermerModalRendezVous()">Fermer</button>
+          <button *ngIf="rendezVousReparations.length > 0" class="px-4 py-2 bg-green-600 text-white rounded-lg" 
+                  (click)="genererFactureReparation(rendezVousSelectionne, rendezVousReparations)">
+            Générer Facture
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

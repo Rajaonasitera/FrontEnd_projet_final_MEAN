@@ -1,53 +1,100 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Nft } from '../../dashboard/models/nft';
-import { NftHeaderComponent } from '../../dashboard/components/nft/nft-header/nft-header.component';
-import { NftDualCardComponent } from '../../dashboard/components/nft/nft-dual-card/nft-dual-card.component';
-import { NftSingleCardComponent } from '../../dashboard/components/nft/nft-single-card/nft-single-card.component';
-import { NftChartCardComponent } from '../../dashboard/components/nft/nft-chart-card/nft-chart-card.component';
-import { NftAuctionsTableComponent } from '../../dashboard/components/nft/nft-auctions-table/nft-auctions-table.component';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ServiceService } from 'src/app/utiles/service.service';
 
 @Component({
   selector: 'app-produits',
-  imports: [
-    NftHeaderComponent,
-    NftDualCardComponent,
-    NftSingleCardComponent,
-    NftChartCardComponent,
-    NftAuctionsTableComponent,
-  ],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './produits.component.html',
-  styleUrl: './produits.component.css'
+  styleUrls: ['./produits.component.css']
 })
 export class ProduitsComponent {
-nft: Array<Nft>;
+  produits: any[] = [];
+  selectedProduit: any = null;
+  quantity: number = 1;
+  adresse: string = "";
+  panier: { produit: any, quantity: number }[] = [];
 
-  constructor() {
-    this.nft = [
-      {
-        id: 34356771,
-        title: 'Girls of the Cartoon Universe',
-        creator: 'Jhon Doe',
-        instant_price: 4.2,
-        price: 187.47,
-        ending_in: '06h 52m 47s',
-        last_bid: 0.12,
-        image: './assets/images/img-01.jpg',
-        avatar: './assets/avatars/avt-01.jpg',
-      },
-      {
-        id: 34356772,
-        title: 'Pupaks',
-        price: 548.79,
-        last_bid: 0.35,
-        image: './assets/images/img-02.jpg',
-      },
-      {
-        id: 34356773,
-        title: 'Seeing Green collection',
-        price: 234.88,
-        last_bid: 0.15,
-        image: './assets/images/img-03.jpg',
-      },
-    ];
+  constructor(private serviceService: ServiceService, private router: Router) {}
+
+  ngOnInit() {
+    this.fetch();
   }
+
+  async fetch() {
+    try {
+      this.produits = await this.serviceService.getArticles();
+    } catch (error) {
+      this.router.navigate(["error/"]);
+    }
+  }
+
+  openModal(produit: any): void {
+    this.selectedProduit = produit;
+    this.quantity = 1;
+  }
+
+  closeModal(): void {
+    this.selectedProduit = null;
+  }
+
+  ajouterAuPanier() {
+    if (this.selectedProduit) {
+      const index = this.panier.findIndex(item => item.produit._id === this.selectedProduit._id);
+
+      if (index !== -1) {
+        this.panier[index].quantity += this.quantity;
+      } else {
+        this.panier.push({ produit: this.selectedProduit, quantity: this.quantity });
+      }
+
+      this.closeModal();
+    }
+  }
+
+  getTotalItems() {
+    return this.panier.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  async confirmerAchat() {
+    const id = await this.serviceService.getIdClient();
+    if (id && this.panier.length > 0) {
+      const panierData = {
+        adresseLivraison: this.adresse,
+        clientId: id
+      };
+      const panierId = await this.serviceService.postPanier(panierData);
+
+      for (const item of this.panier) {
+        const detailsPanier = {
+          panierId: panierId,
+          produitId: item.produit._id,
+          qte: item.quantity
+        };
+        await this.serviceService.postDetailsPanier(detailsPanier);
+      }
+
+      this.panier = [];  
+      this.adresse = "";
+      this.closePanier();
+    }
+  }
+
+  panierOuvert: boolean = false;
+
+  openPanier(): void {
+    if (this.panier.length > 0) {
+      this.panierOuvert = true;
+    }else{
+      alert("Le panier est vide");
+    }
+  }
+
+  closePanier(): void {
+    this.panierOuvert = false;
+  }
+
 }

@@ -1,0 +1,25 @@
+<div class="pt-2" *ngFor="let menu of page">
+  <div class="mx-2 mb-2 flex items-center gap-2">
+    <a 
+      [routerLink]="menu.route"
+      class="flex items-center w-full p-2 transition-all duration-200 
+             hover:border-blue-500"
+    >
+      <small 
+        [ngClass]="{
+          'opacity-100': menuService.showSideBar,
+          'opacity-0 hidden': !menuService.showSideBar
+        }"
+        class="text-muted-foreground/50 text-xs font-semibold transition-all duration-200"
+      >
+        {{ menu.group }}
+      </small>
+    </a>
+  </div>
+    <hr class="border-muted border-dashed" />
+  
+
+  <div class="pt-3" *ngIf="menu.separator">
+    <hr class="border-border border-dashed" />
+  </div>
+</div>

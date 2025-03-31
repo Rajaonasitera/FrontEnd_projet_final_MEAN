@@ -1,40 +1,47 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ServiceService } from 'src/app/utiles/service.service';
 
 @Component({
   selector: 'app-rendez-vous',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
   templateUrl: './rendez-vous.component.html',
-  styleUrl: './rendez-vous.component.css'
+  styleUrls: ['./rendez-vous.component.scss'],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class RendezVousComponent {
-  rdvForm: FormGroup;
-  services = [
-    { id: 1, nom: 'Réparation moteur' },
-    { id: 2, nom: 'Changement de pneus' },
-  ];
+  rendezVousForm: FormGroup;
+  minDate: Date;
+  selectedServices: number[] = [];
+  availableTimeSlots = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'];
 
-  constructor(private fb: FormBuilder) {
-    this.rdvForm = this.fb.group({
-      dateRdv: ['', Validators.required],
-      voiture: ['', Validators.required],
-      service: ['', Validators.required],
+  constructor(private fb: FormBuilder, private serviceService: ServiceService, private router: Router) {
+    this.minDate = new Date();
+    this.rendezVousForm = this.fb.group({
+      description: ['', Validators.required],
+      date: ['', Validators.required],
+      heure: ['', Validators.required],
+      lieu: ['', Validators.required]
     });
   }
 
-  onSubmit() {
-    if (this.rdvForm.valid) {
-      const formData = this.rdvForm.value;
-      console.log(formData);
-    } else {
-      console.log('Le formulaire est invalide');
-    }
+  async onSubmit(){
+    console.log("atp");
+    const clientId = await this.serviceService.getIdClient();
+      const formData = {
+        ...this.rendezVousForm.value,
+        client: clientId,
+        personnel: "En attente",
+        remarque: "",
+        etat: 'En attente'
+      };
+      try {
+        console.log('Rendez-vous soumis:', formData);
+        await this.serviceService.postRendezVous(formData);
+        this.router.navigate(["/client/profile"]);
+      } catch (error) {
+        
+      }
   }
-  
-  ngOnInit(): void {}
 }

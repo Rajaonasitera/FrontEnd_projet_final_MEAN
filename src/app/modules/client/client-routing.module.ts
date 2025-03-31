@@ -14,11 +14,11 @@ const routes: Routes = [
     component: ClientComponent,
     children: [
       { path: '', redirectTo: 'service', pathMatch: 'full' },
-      { path: 'service', component: ServicesComponent, canActivate: [ClientAuthGuard]},
+      { path: 'service', component: ServicesComponent},
       { path: 'profile', component: ProfileComponent, canActivate: [ClientAuthGuard] },
-      { path: 'produits', component: ProduitsComponent, canActivate: [ClientAuthGuard] },
+      { path: 'produits', component: ProduitsComponent },
       { path: 'rendezvous', component: RendezVousComponent, canActivate: [ClientAuthGuard] },
-      { path: '**', component: ErrorComponent, canActivate: [ClientAuthGuard] },
+      { path: '**', component: ErrorComponent },
     ],
   },
 ];

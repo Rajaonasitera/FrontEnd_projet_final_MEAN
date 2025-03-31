@@ -22,6 +22,11 @@ const routes: Routes = [
     loadChildren: () => import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
+    path: 'meca',
+    component: LayoutComponent,
+    loadChildren: () => import('../meca/meca.module').then((m) => m.MecaModule),
+  },
+  {
     path: 'components',
     component: LayoutComponent,
     loadChildren: () => import('../uikit/uikit.module').then((m) => m.UikitModule),

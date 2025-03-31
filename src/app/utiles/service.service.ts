@@ -35,6 +35,14 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits`));
   }
 
+  async getArticles(): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits/allArticles`));
+  }
+
+  async getServices(): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits/allServices`));
+  }
+
   async getVoitures(): Promise<any[]> {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}voitures`));
   }
@@ -46,6 +54,23 @@ export class ServiceService {
   async getRendezVous(): Promise<any[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv`, { headers }));
+  }
+
+  async getRendezVousByClient(idClient: string): Promise<any[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv/byClient/`+idClient, { headers }));
+  }
+
+  async getPanierByClient(idClient: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}panier/byClient/`+idClient));
+  }
+
+  async getClient(idClient: string): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}users/userId/`+idClient));
+  }
+
+  async getDetailsPanierByPanier(idPanier: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}detailsPanier/`+idPanier));
   }
 
   async postClient(client: any): Promise<any> {
@@ -60,6 +85,14 @@ export class ServiceService {
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}voitures`, produit));
   }
 
+  async postPanier(produit: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}panier`, produit));
+  }
+
+  async postDetailsPanier(produit: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}detailsPanier`, produit));
+  }
+
   async postReparation(produit: any): Promise<any> {
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}reparation`, produit));
   }
@@ -69,14 +102,19 @@ export class ServiceService {
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}rdv`, produit, { headers }));
   }
 
-  async getToken(credentials: any): Promise<string> {
-    const response = await firstValueFrom(this.http.post<{ token: string }>(`${this.apiUrl}auth/login`, credentials));
-    return response.token;
-  }
+  // async getToken(credentials: any): Promise<string> {
+  //   const response = await firstValueFrom(this.http.post<{ token: string }>(`${this.apiUrl}auth/login`, credentials));
+  //   return response.token;
+  // }
 
   async getType(): Promise<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
     return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getRole`, { headers }));
+  }
+
+  async getIdClient(): Promise<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getUserId`, { headers }));
   }
 
   async check(email: string, password: string): Promise<any> {

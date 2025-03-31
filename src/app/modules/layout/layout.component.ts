@@ -46,17 +46,20 @@ export class LayoutComponent implements OnInit {
 
   async checkUserType() {
     try {
-      
-      const type = await this.service.getType();
+      if (this.token) {
+        const type = await this.service.getType();
       this.isClient = String(type) === "1";
       this.isMeca = String(type) === "50";
       this.isAdmin = String(type) === "100";
 
       if (!this.isAdmin && !this.isClient && !this.isMeca) {
-        localStorage.removeItem("type");
+        localStorage.removeItem("token");
         this.router.navigate(['/auth/sign-in']);
-      
+      }else{
+        this.isConnected = true;
       }
+      }
+      
     } catch (error) {
       
     }

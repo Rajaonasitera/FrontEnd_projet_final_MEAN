@@ -21,8 +21,8 @@
         <img class="rounded-md" src="https://avatars.githubusercontent.com/u/12519008?v=4" alt="" />
       </div>
       <div class="text-foreground overflow-hidden px-2 text-sm font-semibold">
-        Luciano Oliveira
-        <p class="text-muted-foreground truncate text-ellipsis text-xs font-semibold">me&#64;lanno.dev</p>
+        {{user?.name}}
+        <p class="text-muted-foreground truncate text-ellipsis text-xs font-semibold"> {{user?.email}}</p>
       </div>
     </div>
 
@@ -38,6 +38,13 @@
         {{ item.title }}
       </li>
       }
+      <li
+        class="text-muted-foreground hover:bg-card hover:text-primary inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold"
+        (click)="deconnecter()">
+        <svg-icon src="./assets/icons/heroicons/outline/logout.svg" [svgClass]="'h-5 w-5 text-muted-foreground/50'">
+        </svg-icon>
+        Se déconnecter
+      </li>
     </ul>
     <!-- <hr class="border-border border-dashed" /> -->
     <!-- <div class="mx-4 my-2">

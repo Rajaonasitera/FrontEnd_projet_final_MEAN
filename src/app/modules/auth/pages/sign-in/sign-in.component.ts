@@ -57,7 +57,6 @@ export class SignInComponent implements OnInit {
     localStorage.setItem("telephone", this.form.get('telephone')?.value);
     
     console.log("Connexion réussie");
-    
     this.router.navigate(['/']);
   }
 

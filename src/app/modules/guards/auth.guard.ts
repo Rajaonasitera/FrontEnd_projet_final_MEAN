@@ -11,7 +11,13 @@ export class AuthGuard implements CanActivate {
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
     try {
       const token = localStorage.getItem('Token'); 
+    if (!token) {
+      this.router.navigate(['/client']);
+      return false;
+    }
     if (token) {
+      console.log("ato?");
+      
       const type = await this.service.getType(); 
       if (state.url !== '/') {
         this.router.navigate(['/auth/sign-up']);
@@ -19,8 +25,12 @@ export class AuthGuard implements CanActivate {
       }else{
         if (String(type) === '1') {
           this.router.navigate(['/client']);
-        } else {
+        } 
+        else if (String(type) === '100'){
           this.router.navigate(['/admin']);
+        }
+        else if (String(type) === '50'){
+          this.router.navigate(['/meca']);
         }
         return false; 
       }
