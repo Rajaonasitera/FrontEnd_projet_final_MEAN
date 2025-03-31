@@ -7,7 +7,7 @@ import { ServiceService } from 'src/app/utiles/service.service';
 @Component({
   selector: 'app-rendez-vous',
   templateUrl: './rendez-vous.component.html',
-  styleUrls: ['./rendez-vous.component.scss'],
+  styleUrls: ['./rendez-vous.component.css'],
   imports: [CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class RendezVousComponent {

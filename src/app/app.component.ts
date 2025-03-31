@@ -10,7 +10,7 @@ import { ClientAuthGuard } from './modules/guards/client-auth.guard';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.css'],
   imports: [RouterOutlet, ResponsiveHelperComponent, NgxSonnerToaster, HttpClientModule],
   providers: [ServiceService, AuthGuard, ClientAuthGuard]
 })
