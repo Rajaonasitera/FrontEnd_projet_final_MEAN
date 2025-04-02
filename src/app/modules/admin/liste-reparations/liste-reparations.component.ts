@@ -30,10 +30,11 @@ export class ListeReparationsComponent {
 
   async fetch() {
     try {
-      this.reparations = await this.serviceService.getReparations();
+      // this.reparations = await this.serviceService.getReparations();
+      this.reparations = [];
       this.appliquerFiltres();
     } catch (error) {
-      this.router.navigate(["error/"]);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -55,7 +56,7 @@ export class ListeReparationsComponent {
       this.isEditing = false;
       this.fetch();
     } catch (error) {
-      console.error('Error updating reparation:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -65,7 +66,7 @@ export class ListeReparationsComponent {
       this.fetch();
       this.fermerModal();
     } catch (error) {
-      console.error('Error deleting reparation:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -95,7 +96,7 @@ export class ListeReparationsComponent {
       this.fetch();
       this.fermerAjoutReparationModal();
     } catch (error) {
-      console.error('Error adding reparation:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 

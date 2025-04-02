@@ -28,11 +28,14 @@ export class ProfileComponent {
 
   async fetch() {
     try {
-      this.clientId = await this.serviceService.getIdClient();
+      const token = localStorage.getItem("Token");
+      if (token) {
+        this.clientId = await this.serviceService.getIdClient(token);
       this.paniersClient = await this.serviceService.getPanierByClient(this.clientId);
       this.suiviRendezVous = await this.serviceService.getRendezVousByClient(this.clientId);
+      }
     } catch (error) {
-      this.router.navigate(["error/"]) 
+      this.router.navigate(["error/error-server"]); 
     }
   }
 
@@ -47,6 +50,7 @@ export class ProfileComponent {
       // this.rendezVousReparations = await this.serviceService.getReparationsByRendezVous(rendezVous._id);
     } catch (error) {
       this.rendezVousReparations = [];
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -72,101 +76,107 @@ export class ProfileComponent {
   }
 
   async genererFacture(panier: any, detail: any[]) {
-    const id = await this.serviceService.getIdClient();
-    const user: any = await this.serviceService.getClient(id);
+    const token = localStorage.getItem("Token");
+    if (token) {
+      const id = await this.serviceService.getIdClient(token);
+      const user: any = await this.serviceService.getClient(id);
 
-    const doc = new jsPDF();
+      const doc = new jsPDF();
 
-    fetch('assets/icons/logo.png')
-      .then(response => response.blob())
-      .then(blob => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          const logo = reader.result as string;
+      fetch('assets/icons/logo.png')
+        .then(response => response.blob())
+        .then(blob => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            const logo = reader.result as string;
 
-          doc.addImage(logo, 'PNG', 10, 10, 40, 30);
+            doc.addImage(logo, 'PNG', 10, 10, 40, 30);
 
-          doc.setFontSize(18);
-          doc.text('Facture', 105, 35, { align: 'center' });
+            doc.setFontSize(18);
+            doc.text('Facture', 105, 35, { align: 'center' });
 
-          doc.setFontSize(12);
-          doc.text(`Date: ${(new Date(panier.daty)).toLocaleDateString()}`, 10, 50);
-          doc.text(`Client: ${user.name}`, 10, 60);
-          doc.text(`Numéro de facture: INV-${panier._id}`, 10, 70);
+            doc.setFontSize(12);
+            doc.text(`Date: ${(new Date(panier.daty)).toLocaleDateString()}`, 10, 50);
+            doc.text(`Client: ${user.name}`, 10, 60);
+            doc.text(`Numéro de facture: INV-${panier._id}`, 10, 70);
 
-          doc.setLineWidth(0.5);
-          doc.line(10, 75, 200, 75);
+            doc.setLineWidth(0.5);
+            doc.line(10, 75, 200, 75);
 
-          autoTable(doc, {
-            startY: 80,
-            head: [['Produit', 'Quantité', 'Prix Unitaire', 'Total']],
-            body: detail.map((produit: any) => [
-              produit.produitId.designation,
-              produit.qte,
-              `${produit.produitId.prixvente} Ar`,
-              `${produit.qte * produit.produitId.prixvente} Ar`
-            ]),
-            theme: 'grid',
-            styles: { fontSize: 10, cellPadding: 3 },
-          });
+            autoTable(doc, {
+              startY: 80,
+              head: [['Produit', 'Quantité', 'Prix Unitaire', 'Total']],
+              body: detail.map((produit: any) => [
+                produit.produitId.designation,
+                produit.qte,
+                `${produit.produitId.prixvente} Ar`,
+                `${produit.qte * produit.produitId.prixvente} Ar`
+              ]),
+              theme: 'grid',
+              styles: { fontSize: 10, cellPadding: 3 },
+            });
 
-          const finalY = (doc as any).lastAutoTable.finalY || 100;
-          doc.setFontSize(14);
-          doc.text(`Total: ${this.getTotal(detail)} Ar`, 150, finalY + 10);
+            const finalY = (doc as any).lastAutoTable.finalY || 100;
+            doc.setFontSize(14);
+            doc.text(`Total: ${this.getTotal(detail)} Ar`, 150, finalY + 10);
 
-          doc.save(`Facture_${(new Date(panier.daty)).toLocaleDateString()}.pdf`);
-        };
-      })
-      .catch(error => console.error('Erreur de chargement du logo:', error));
+            doc.save(`Facture_${(new Date(panier.daty)).toLocaleDateString()}.pdf`);
+          };
+        })
+        .catch(error => console.error('Erreur de chargement du logo:', error));
+    }
   }
 
   async genererFactureReparation(rendezVous: any, reparations: any[]) {
-    const id = await this.serviceService.getIdClient();
-    const user: any = await this.serviceService.getClient(id);
+    const token = localStorage.getItem("Token");
+    if (token) {
+      const id = await this.serviceService.getIdClient(token);
+      const user: any = await this.serviceService.getClient(id);
 
-    const doc = new jsPDF();
+      const doc = new jsPDF();
 
-    fetch('assets/icons/logo.png')
-      .then(response => response.blob())
-      .then(blob => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          const logo = reader.result as string;
+      fetch('assets/icons/logo.png')
+        .then(response => response.blob())
+        .then(blob => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            const logo = reader.result as string;
 
-          doc.addImage(logo, 'PNG', 10, 10, 40, 30);
+            doc.addImage(logo, 'PNG', 10, 10, 40, 30);
 
-          doc.setFontSize(18);
-          doc.text('Facture de Réparation', 105, 35, { align: 'center' });
+            doc.setFontSize(18);
+            doc.text('Facture de Réparation', 105, 35, { align: 'center' });
 
-          doc.setFontSize(12);
-          doc.text(`Date: ${(new Date(rendezVous.date)).toLocaleDateString()}`, 10, 50);
-          doc.text(`Client: ${user.name}`, 10, 60);
-          doc.text(`Numéro de facture: REP-${rendezVous._id}`, 10, 70);
+            doc.setFontSize(12);
+            doc.text(`Date: ${(new Date(rendezVous.date)).toLocaleDateString()}`, 10, 50);
+            doc.text(`Client: ${user.name}`, 10, 60);
+            doc.text(`Numéro de facture: REP-${rendezVous._id}`, 10, 70);
 
-          doc.setLineWidth(0.5);
-          doc.line(10, 75, 200, 75);
+            doc.setLineWidth(0.5);
+            doc.line(10, 75, 200, 75);
 
-          autoTable(doc, {
-            startY: 80,
-            head: [['Description', 'Durée (heures)', 'Prix']],
-            body: reparations.map((reparation: any) => [
-              reparation.description,
-              reparation.duree,
-              `${reparation.prix} Ar`
-            ]),
-            theme: 'grid',
-            styles: { fontSize: 10, cellPadding: 3 },
-          });
+            autoTable(doc, {
+              startY: 80,
+              head: [['Description', 'Durée (heures)', 'Prix']],
+              body: reparations.map((reparation: any) => [
+                reparation.description,
+                reparation.duree,
+                `${reparation.prix} Ar`
+              ]),
+              theme: 'grid',
+              styles: { fontSize: 10, cellPadding: 3 },
+            });
 
-          const finalY = (doc as any).lastAutoTable.finalY || 100;
-          doc.setFontSize(14);
-          doc.text(`Total: ${this.getTotalReparations(reparations)} Ar`, 150, finalY + 10);
+            const finalY = (doc as any).lastAutoTable.finalY || 100;
+            doc.setFontSize(14);
+            doc.text(`Total: ${this.getTotalReparations(reparations)} Ar`, 150, finalY + 10);
 
-          doc.save(`Facture_Reparation_${(new Date(rendezVous.date)).toLocaleDateString()}.pdf`);
-        };
-      })
-      .catch(error => console.error('Erreur de chargement du logo:', error));
+            doc.save(`Facture_Reparation_${(new Date(rendezVous.date)).toLocaleDateString()}.pdf`);
+          };
+        })
+        .catch(error => console.error('Erreur de chargement du logo:', error));
+    }
   }
 }

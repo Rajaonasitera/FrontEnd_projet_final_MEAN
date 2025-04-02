@@ -35,6 +35,14 @@ export class Menu {
       isMeca: false
     },
     {
+      group: 'Rendez vous',
+      route: '/admin/liste-rendezvous',
+      separator: false,
+      isAdmin: true,
+      isClient: false,
+      isMeca: false
+    },
+    {
       group: 'Liste produits',
       route: '/admin/liste-produits',
       separator: false,
@@ -50,29 +58,29 @@ export class Menu {
       isClient: false,
       isMeca: false
     },
-    {
-      group: 'Liste voitures',
-      route: '/admin/liste-voitures',
-      separator: false,
-      isAdmin: true,
-      isClient: false,
-      isMeca: false
-    },
+    // {
+    //   group: 'Liste reparation',
+    //   route: '/admin/liste-reparations',
+    //   separator: false,
+    //   isAdmin: true,
+    //   isClient: false,
+    //   isMeca: false
+    // },
     {
       group: 'Liste rendez vous',
-      route: '/admin/liste-rendezvous',
+      route: '/meca/rdv',
       separator: false,
-      isAdmin: true,
+      isAdmin: false,
       isClient: false,
-      isMeca: false
+      isMeca: true
     },
     {
-      group: 'Liste reparation',
-      route: '/admin/liste-reparations',
+      group: 'Liste voitures',
+      route: '/meca/liste-voitures',
       separator: false,
-      isAdmin: true,
+      isAdmin: false,
       isClient: false,
-      isMeca: false
+      isMeca: true
     },
   ];
 }

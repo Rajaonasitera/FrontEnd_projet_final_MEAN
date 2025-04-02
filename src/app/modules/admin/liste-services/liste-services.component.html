@@ -1,1 +1,116 @@
-<p>liste-services works!</p>
+<div
+  id="main-content"
+  class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted flex w-full flex-col items-center justify-center">
+  <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+    <div class="bg-background mb-6 rounded-lg p-6 shadow-md">
+      <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <h2 class="text-foreground text-lg font-semibold">Liste des services</h2>
+        <div class="relative w-full md:w-64">
+          <input
+            type="search"
+            id="search"
+            class="bg-card border-border text-foreground block w-full rounded-lg border p-2.5 pl-10 text-sm"
+            placeholder="Rechercher un service..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="appliquerFiltres()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ouvrirAjoutserviceModal()">Ajouter un service</button>
+    </div>
+  </div>
+
+  <div class="bg-background rounded-lg px-6 py-6 shadow-md" style="height: 500px;">
+    <div class="relative">
+        <table class="w-full table-auto">
+            <thead class="bg-muted/20 text-muted-foreground text-xs uppercase">
+                <tr>
+                    <th class="py-3 px-4 text-left">Désignation</th>
+                    <th class="py-3 px-4 text-left">Description</th>
+                    <th class="py-3 px-4 text-left">Prix de Vente</th>
+                    <th class="py-3 px-4 text-left">Type de service</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="w-full table-auto">
+                <tbody>
+                    <tr *ngFor="let service of servicesFilters" class="border-border hover:bg-card/50 border-b border-dashed">
+                        <td class="py-4 px-4 text-left">
+                            <div class="flex items-center">
+                                <div class="bg-primary text-primary-foreground mr-3 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium">
+                                    {{ service.designation.charAt(0) }}
+                                </div>
+                                <div class="text-foreground font-medium">{{ service.designation }}</div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-left">{{ service.description }}</td>
+                        <td class="py-4 px-4 text-right">{{ service.prixvente }} Ar</td>
+                        <td class="py-4 px-4 text-left">{{ service.typeproduit }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <button class="rounded-md bg-blue-500 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-600"
+                                (click)="voirDetails(service)">Voir détails</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="selectedservice" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Détails du service</h2>
+      <label class="block text-sm font-medium text-gray-700">Désignation</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedservice.designation" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedservice.description" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Prix de Vente</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" [(ngModel)]="selectedservice.prixvente" [disabled]="!isEditing" />
+      
+      <label class="block text-sm font-medium text-gray-700">Type de service</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="selectedservice.typeproduit" [disabled]="!isEditing">
+        <option value="Article">Article</option>
+        <option value="Service">Service</option>
+      </select>
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button *ngIf="!isEditing" class="bg-yellow-500 text-white px-4 py-2 rounded" (click)="isEditing = true">Modifier</button>
+        <button *ngIf="isEditing" class="bg-green-500 text-white px-4 py-2 rounded" (click)="enregistrerModification()">Enregistrer</button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded" (click)="supprimerservice(selectedservice)">Supprimer</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAjoutserviceModalOpen" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Ajouter un service</h2>
+      <label class="block text-sm font-medium text-gray-700">Désignation</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauservice.designation" />
+      
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="nouveauservice.description" />
+      
+      <label class="block text-sm font-medium text-gray-700">Prix de Vente</label>
+      <input type="text" class="w-full p-2 border rounded mb-4" [(ngModel)]="nouveauservice.prixvente" />
+      
+      <label class="block text-sm font-medium text-gray-700">Type de service</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="nouveauservice.typeproduit">
+        <option value="Article">Article</option>
+        <option value="Service">Service</option>
+      </select>
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ajouterservice()">Ajouter</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerAjoutserviceModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

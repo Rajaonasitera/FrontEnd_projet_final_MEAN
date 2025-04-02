@@ -42,22 +42,27 @@ export class SignInComponent implements OnInit {
     const token = await this.service.check(this.form.get('email')?.value ,this.form.get('password')?.value);
 
     localStorage.setItem("Token", token.token);
-    console.log(token, "hehehe");
-    
-    if (this.form.get('telephone')?.value === "1") {
-      localStorage.setItem("type", "1");
-    }
-    if (this.form.get('telephone')?.value === "2") {
-      localStorage.setItem("type", "2");
-    }
-    if (this.form.get('telephone')?.value === "3") {
-      localStorage.setItem("type", "3");
+    let type;
+    if (token.token) {
+      type = await this.service.getType(token.token);
     }
 
-    localStorage.setItem("telephone", this.form.get('telephone')?.value);
+    if (type) {
+      if (Number(type) === 1) {
+        this.router.navigate(['/client/']);
+        console.log("heee");
+        
+      }
+      if (Number(type) === 50) {
+        this.router.navigate(['/meca/']);
+      }
+      if (Number(type) === 100) {
+        this.router.navigate(['/admin/']);
+      }
+    }
     
-    console.log("Connexion réussie");
-    this.router.navigate(['/']);
+   
+
   }
 
   ngOnDestroy(): void {

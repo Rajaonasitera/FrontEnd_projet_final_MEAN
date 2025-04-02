@@ -27,8 +27,9 @@ export class RendezVousComponent {
   }
 
   async onSubmit(){
-    console.log("atp");
-    const clientId = await this.serviceService.getIdClient();
+    const token = localStorage.getItem("Token");
+    if (token) {
+      const clientId = await this.serviceService.getIdClient(token);
       const formData = {
         ...this.rendezVousForm.value,
         client: clientId,
@@ -38,10 +39,12 @@ export class RendezVousComponent {
       };
       try {
         console.log('Rendez-vous soumis:', formData);
-        await this.serviceService.postRendezVous(formData);
+        await this.serviceService.postRendezVous(formData, token);
         this.router.navigate(["/client/profile"]);
       } catch (error) {
-        
+        this.router.navigate(["error/error-server"]);
       }
+    }
+    
   }
 }

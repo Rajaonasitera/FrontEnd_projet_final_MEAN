@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
 })
 export class ServiceService {
   private apiUrl = environment.apiUrl+'/mean/';
-  private token = localStorage.getItem("Token");
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +30,10 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}users`));
   }
 
+  async getMecaniciens(): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}users/allpersonnel`));
+  }
+
   async getProduits(): Promise<any[]> {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits`));
   }
@@ -47,18 +50,30 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}voitures`));
   }
 
-  async getReparations(): Promise<any[]> {
-    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}reparation`));
+  async getVoituresByClient(idClient: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}voitures/byClient/`+idClient));
+  }
+
+  async getReparations(idRdv: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}reparation/byRdv/`+idRdv));
   }
 
   async getRendezVous(): Promise<any[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
-    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv`, { headers }));
+    const token = localStorage.getItem("Token");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv`));
   }
 
   async getRendezVousByClient(idClient: string): Promise<any[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    const token = localStorage.getItem("Token");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv/byClient/`+idClient, { headers }));
+  }
+
+  async getRendezVousByMeca(idMeca: string): Promise<any[]> {
+    const token = localStorage.getItem("Token");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}rdv/byPersonnel/`+idMeca, { headers }));
   }
 
   async getPanierByClient(idClient: string): Promise<any[]> {
@@ -81,25 +96,30 @@ export class ServiceService {
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}produits`, produit));
   }
 
-  async postVoiture(produit: any): Promise<any> {
-    return firstValueFrom(this.http.post<any>(`${this.apiUrl}voitures`, produit));
+  async postVoiture(voiture: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}voitures`, voiture));
   }
 
-  async postPanier(produit: any): Promise<any> {
-    return firstValueFrom(this.http.post<any>(`${this.apiUrl}panier`, produit));
+  async postPanier(panier: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}panier`, panier));
   }
 
-  async postDetailsPanier(produit: any): Promise<any> {
-    return firstValueFrom(this.http.post<any>(`${this.apiUrl}detailsPanier`, produit));
+  async postDetailsPanier(detail: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}detailsPanier`, detail));
   }
 
-  async postReparation(produit: any): Promise<any> {
-    return firstValueFrom(this.http.post<any>(`${this.apiUrl}reparation`, produit));
+  async postReparation(reparation: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}reparation`, reparation));
   }
 
-  async postRendezVous(produit: any): Promise<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+  async postRendezVous(produit: any, token: string): Promise<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}rdv`, produit, { headers }));
+  }
+
+  async updateRendezVous(rdv: any, token: string | null, id: string): Promise<any>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return firstValueFrom(this.http.put<any>(`${this.apiUrl}rdv/update/`+id, rdv, { headers }));
   }
 
   // async getToken(credentials: any): Promise<string> {
@@ -107,13 +127,13 @@ export class ServiceService {
   //   return response.token;
   // }
 
-  async getType(): Promise<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+  async getType(token: string): Promise<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getRole`, { headers }));
   }
 
-  async getIdClient(): Promise<any> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+  async getIdClient(token: string): Promise<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getUserId`, { headers }));
   }
 
@@ -123,12 +143,13 @@ export class ServiceService {
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}testLogin`, user, { headers }));
   }
 
-  async createUsers(name: string, email: string, numero: string, password: string){
+  async createUsers(name: string, email: string, numero: string, password: string, role: string){
     const user = {
       name: name,
       email: email,
       telephone: numero,
-      password: password
+      password: password,
+      role: role
     }
     console.log(user, "userrr");
     

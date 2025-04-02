@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'components', pathMatch: 'full' },
       { path: 'table', component: TableComponent },
-      { path: '**', component: ErrorComponent },
+      { path: '**', redirectTo: 'errors/404' },
     ],
   },
 ];

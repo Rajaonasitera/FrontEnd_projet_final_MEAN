@@ -28,7 +28,7 @@ export class ProduitsComponent {
     try {
       this.produits = await this.serviceService.getArticles();
     } catch (error) {
-      this.router.navigate(["error/"]);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -60,7 +60,9 @@ export class ProduitsComponent {
   }
 
   async confirmerAchat() {
-    const id = await this.serviceService.getIdClient();
+    const token = localStorage.getItem("Token");
+    if (token) {
+      const id = await this.serviceService.getIdClient(token);
     if (id && this.panier.length > 0) {
       const panierData = {
         adresseLivraison: this.adresse,
@@ -80,6 +82,7 @@ export class ProduitsComponent {
       this.panier = [];  
       this.adresse = "";
       this.closePanier();
+    }
     }
   }
 

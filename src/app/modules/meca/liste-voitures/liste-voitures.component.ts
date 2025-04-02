@@ -34,7 +34,7 @@ export class ListeVoituresComponent {
       this.voitures = await this.serviceService.getVoitures();
       this.appliquerFiltres();
     } catch (error) {
-      this.router.navigate(["error/"]);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -58,7 +58,7 @@ export class ListeVoituresComponent {
       this.isEditing = false;
       this.fetch();
     } catch (error) {
-      console.error('Error updating voiture:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -68,7 +68,7 @@ export class ListeVoituresComponent {
       this.fetch();
       this.fermerModal();
     } catch (error) {
-      console.error('Error deleting voiture:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -98,7 +98,7 @@ export class ListeVoituresComponent {
       this.fetch();
       this.fermerAjoutVoitureModal();
     } catch (error) {
-      console.error('Error adding voiture:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 

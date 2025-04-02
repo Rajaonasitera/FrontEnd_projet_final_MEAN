@@ -22,7 +22,7 @@ export class ServicesComponent implements OnInit{
     try {
       this.services = await this.service.getServices();
     } catch (error) {
-      this.router.navigate(["error/"]) 
+      this.router.navigate(["error/error-server"]);
     }
   }
 }

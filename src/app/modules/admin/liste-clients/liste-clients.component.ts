@@ -17,7 +17,7 @@ export class ListeClientsComponent {
   selectedClient: any = null;
   isEditing: boolean = false;
   isAjoutClientModalOpen: boolean = false;
-  nouveauClient: any = { name: '', email: '', numero: '' , password: ''};
+  nouveauClient: any = { name: '', email: '', numero: '' , password: '', role: ''};
 
   constructor(
     private router: Router, 
@@ -33,7 +33,7 @@ export class ListeClientsComponent {
       this.clients = await this.serviceService.getClients();
       this.appliquerFiltres(); 
     } catch (error) {
-      this.router.navigate(["error/"]) 
+      this.router.navigate(["error/error-server"]); 
     }
   }
 
@@ -55,7 +55,7 @@ export class ListeClientsComponent {
       this.isEditing = false;
       this.fetch();
     } catch (error) {
-      console.error('Error updating client:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -65,7 +65,7 @@ export class ListeClientsComponent {
       this.fetch();
       this.fermerModal();
     } catch (error) {
-      console.error('Error deleting client:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -79,16 +79,16 @@ export class ListeClientsComponent {
 
   fermerAjoutClientModal() {
     this.isAjoutClientModalOpen = false;
-    this.nouveauClient = { name: '', email: '', numero: '' };
+    this.nouveauClient = { name: '', email: '', numero: '', role: '' };
   }
 
   async ajouterClient() {
     try {
-      await this.serviceService.createUsers(this.nouveauClient.name, this.nouveauClient.email, this.nouveauClient.numero, this.nouveauClient.password);
+      await this.serviceService.createUsers(this.nouveauClient.name, this.nouveauClient.email, this.nouveauClient.numero, this.nouveauClient.password, this.nouveauClient.role);
       this.fetch();
       this.fermerAjoutClientModal();
     } catch (error) {
-      console.error('Error adding client:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 

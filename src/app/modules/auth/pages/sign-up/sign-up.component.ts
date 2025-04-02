@@ -40,10 +40,10 @@ export class SignUpComponent implements OnInit {
     };
 
     try {
-      await this.serviceService.createUsers(userData.name, userData.email, userData.telephone, userData.password);
+      await this.serviceService.createUsers(userData.name, userData.email, userData.telephone, userData.password, "1");
       this.router.navigate(["/auth/sign-in"]);
     } catch (error) {
-      
+      this.router.navigate(["error/error-server"]);
     }
 
   }

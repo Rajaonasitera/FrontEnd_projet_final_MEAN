@@ -13,31 +13,32 @@ export class AuthGuard implements CanActivate {
       const token = localStorage.getItem('Token'); 
     if (!token) {
       this.router.navigate(['/client']);
-      return false;
+      return true;
     }
     if (token) {
-      console.log("ato?");
-      
-      const type = await this.service.getType(); 
       if (state.url !== '/') {
         this.router.navigate(['/auth/sign-up']);
         return false;
       }else{
-        if (String(type) === '1') {
-          this.router.navigate(['/client']);
-        } 
-        else if (String(type) === '100'){
-          this.router.navigate(['/admin']);
-        }
-        else if (String(type) === '50'){
-          this.router.navigate(['/meca']);
-        }
-        return false; 
+        const type = await this.service.getType(token);
+        if (type) {
+          if (Number(type) === 1) {
+            this.router.navigate(['/client']);
+          } 
+          else if (Number(type) === 100){
+            this.router.navigate(['/admin']);
+          }
+          else if (Number(type) === 50){
+            this.router.navigate(['/meca']);
+          }
+        return true; 
+      }
+        
       }
     }
     return true;
     } catch (error) {
-      
+      this.router.navigate(["error/error-server"]);
     }
     
   }

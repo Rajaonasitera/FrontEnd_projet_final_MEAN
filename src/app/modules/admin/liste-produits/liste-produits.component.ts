@@ -33,7 +33,7 @@ export class ListeProduitsComponent {
       this.produits = await this.serviceService.getProduits();
       this.appliquerFiltres(); 
     } catch (error) {
-      this.router.navigate(["error/"]) 
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -55,7 +55,7 @@ export class ListeProduitsComponent {
       this.isEditing = false;
       this.fetch();
     } catch (error) {
-      console.error('Error updating product:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -65,7 +65,7 @@ export class ListeProduitsComponent {
       this.fetch();
       this.fermerModal();
     } catch (error) {
-      console.error('Error deleting product:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
@@ -95,7 +95,7 @@ export class ListeProduitsComponent {
       this.fetch();
       this.fermerAjoutProduitModal();
     } catch (error) {
-      console.error('Error adding product:', error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 

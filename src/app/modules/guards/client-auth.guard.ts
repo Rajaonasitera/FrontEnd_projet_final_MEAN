@@ -13,8 +13,8 @@ export class ClientAuthGuard implements CanActivate {
     try {
       const token = localStorage.getItem('Token'); 
     if (token) {
-      const type = await this.service.getType(); 
-      if (type !== 1) {
+      const type = await this.service.getType(token); 
+      if (type && Number(type) !== 1) {
         this.error.setError("Oops, Vous n'avez pas accès!")
         this.router.navigate(['/auth']);
         return false;
@@ -22,7 +22,7 @@ export class ClientAuthGuard implements CanActivate {
     }
     return true;
     } catch (error) {
-      
+      this.router.navigate(["error/error-server"]);
     }
     
   }

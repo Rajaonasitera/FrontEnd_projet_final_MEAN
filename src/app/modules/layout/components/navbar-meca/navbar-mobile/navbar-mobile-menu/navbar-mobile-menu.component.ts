@@ -25,7 +25,7 @@ import { Menu } from 'src/app/core/constants/menu';
 export class NavbarMobileMenuComponent implements OnInit {
   page: any[] = [];
   constructor(public menuService: MenuService) {
-    this.page = Menu.pages.filter(page => page.isClient);
+    this.page = Menu.pages.filter(page => page.isMeca);
     console.log(this.page, "page");
 
   }

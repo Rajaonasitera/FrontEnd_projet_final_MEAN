@@ -64,10 +64,13 @@ export class ProfileMenuComponent implements OnInit {
 
 async fetch() {
   try {
-  const id = await this.service.getIdClient();
-  this.user = await this.service.getClient(id);
+    const token = localStorage.getItem("Token");
+    if (token) {
+      const id = await this.service.getIdClient(token);
+      this.user = await this.service.getClient(id);
+    }
   } catch (error) {
-    this.router.navigate(["error/"]) 
+    this.router.navigate(["error/error-server"]);
   }
 }
 

@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'nfts', pathMatch: 'full' },
       { path: 'nfts', component: NftComponent },
-       { path: '**', component: ErrorComponent },
+       { path: '**', redirectTo: 'errors/404' },
     ],
   },
 ];

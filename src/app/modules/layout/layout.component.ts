@@ -7,13 +7,14 @@ import { ServiceService } from 'src/app/utiles/service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MenuService } from './services/menu.service';
 import { AuthGuard } from '../guards/auth.guard';
+import { MecaComponent } from './meca/meca.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css'],
-  imports: [CommonModule, ClientComponent, AdminComponent],
+  imports: [CommonModule, ClientComponent, AdminComponent, MecaComponent],
   providers:[MenuService]
 })
 export class LayoutComponent implements OnInit {
@@ -47,21 +48,25 @@ export class LayoutComponent implements OnInit {
   async checkUserType() {
     try {
       if (this.token) {
-        const type = await this.service.getType();
-      this.isClient = String(type) === "1";
-      this.isMeca = String(type) === "50";
-      this.isAdmin = String(type) === "100";
-
-      if (!this.isAdmin && !this.isClient && !this.isMeca) {
-        localStorage.removeItem("token");
-        this.router.navigate(['/auth/sign-in']);
+        const type = await this.service.getType(this.token);
+        
+        if (type) {
+          this.isClient = Number(type) === 1;
+          this.isMeca = Number(type) === 50;
+          this.isAdmin = Number(type) === 100;
+          
+          if (!this.isAdmin && !this.isClient && !this.isMeca) {
+            localStorage.removeItem("token");
+            this.router.navigate(['/auth/sign-in']);
+          }
+        
+        } 
       }else{
-        this.isConnected = true;
-      }
+          this.isConnected = true;
       }
       
     } catch (error) {
-      
+      this.router.navigate(["error/error-server"]);
     }
     
   }

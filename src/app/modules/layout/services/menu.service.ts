@@ -62,24 +62,27 @@ export class MenuService implements OnDestroy {
 
   async setUserType(token: string) {
     try {
-      const type = await this.getType();
-  
-      this.isClient = String(type) === "1";
-      this.isAdmin = String(type) === "100";
-      this.isMeca = String(type) === "50";
+
+      const type = await this.service.getType(token);
+      if (type) {
+        this.isClient = Number(type) === 1;
+        this.isAdmin = Number(type) === 100;
+        this.isMeca = Number(type) === 50;
+      }
+      
     } catch (error) {
-      console.error("Erreur lors de la récupération du type d'utilisateur:", error);
+      this.router.navigate(["error/error-server"]);
     }
   }
 
-  async getType(): Promise<any>{
-    try {
-      const type = await this.service.getType();
-      return type;
-    } catch (error) {
+  // async getType(): Promise<any>{
+  //   try {
+  //     const type = await this.service.getType();
+  //     return type;
+  //   } catch (error) {
       
-    }
-  }
+  //   }
+  // }
 
   get showSideBar() {
     return this._showSidebar();

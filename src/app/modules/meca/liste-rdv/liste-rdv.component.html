@@ -1,1 +1,217 @@
-<p>liste-rdv works!</p>
+<div class="container mx-auto p-4 max-w-6xl">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Gestion des Rendez-vous</h1>
+  
+  <!-- Liste des Rendez-vous -->
+  <div class="space-y-4">
+    <div *ngFor="let rdv of rendezvousList" class="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow" (click)="openRdvDetails(rdv)">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <span class="text-sm font-semibold text-blue-600">#{{rdv._id}}</span>
+        <span class="text-sm text-gray-600">{{rdv.date | date:'dd/MM/yyyy'}} à {{rdv.heure}}</span>
+        <span class="text-sm font-medium text-gray-700" *ngIf="rdv.client">{{rdv.clientDetail.name}} {{rdv.clientDetail.telephone}}</span>
+        <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + getStatusClass(rdv.etat)">{{rdv.etat}}</span>
+      </div>
+      <div class="text-gray-600 text-sm">{{rdv.description}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center" *ngIf="selectedRdv">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center">
+      <h2 class="text-2xl font-bold text-gray-800">Détails du Rendez-vous :</h2>
+      <h2 class="text-xl font-bold text-gray-800">#{{selectedRdv._id}}</h2>
+      <button class="text-gray-500 hover:text-gray-700 text-2xl" (click)="closeModal()">×</button>
+    </div>
+    
+    <div class="p-6 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <p><strong class="text-gray-700">Date:</strong> {{selectedRdv.date | date:'dd/MM/yyyy'}} à {{selectedRdv.heure}}</p>
+          <p><strong class="text-gray-700">Lieu:</strong> {{selectedRdv.lieu}}</p>
+          <p><strong class="text-gray-700">Client:</strong> {{selectedRdv.clientDetail?.name}} {{selectedRdv.clientDetail?.telephone}}</p>
+        </div>
+        <div class="space-y-2">
+          <p><strong class="text-gray-700">État:</strong> <span [class]="'px-2 py-1 rounded-full text-xs font-medium ' + getStatusClass(selectedRdv.etat)">{{selectedRdv.etat}}</span></p>
+          <p><strong class="text-gray-700">Remarque:</strong> {{selectedRdv.remarque || 'Aucune'}}</p>
+        </div>
+      </div>
+
+      <div class="border rounded-lg p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Voitures du client</h3>
+          <button class="px-4 py-2 bg-primary text-white rounded-lg" (click)="openAddVoitureModal()">Ajouter Voiture</button>
+        </div>
+        
+        <ul class="space-y-3">
+          <li *ngFor="let voiture of voitures" class="bg-gray-50 p-3 rounded-md">
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="font-medium text-gray-800">{{voiture.marque}} {{voiture.modele}}</span>
+                <span class="block text-sm text-gray-600">{{voiture.annee}} - {{voiture.immatriculation}}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="border rounded-lg p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">Réparations</h3>
+          <button class="px-4 py-2 bg-primary text-white rounded-lg" (click)="openAddReparationModal()">Ajouter Réparation</button>
+        </div>
+        
+        <ul class="space-y-4">
+          <li *ngFor="let reparation of reparations" class="bg-gray-50 p-4 rounded-md">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span class="text-sm font-medium text-gray-600">{{reparation.daty | date:'dd/MM/yyyy'}}</span>
+                <span class="block text-sm font-medium text-gray-800">{{getVoitureName(reparation.voitureId)}}</span>
+              </div>
+            </div>
+            <div class="text-gray-700 mb-3">{{reparation.description}}</div>
+            <div *ngIf="reparation.produits?.length" class="bg-white p-3 rounded border">
+              <span class="text-sm font-medium text-gray-700">Produits utilisés:</span>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span *ngFor="let produit of reparation.produits" class="bg-gray-100 px-2 py-1 rounded text-sm">
+                  {{produit.nom}} ({{produit.reference}})
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-wrap gap-3 justify-end pt-4 border-t">
+        <button *ngIf="selectedRdv.etat !== 'En attente produits' && selectedRdv.etat !== 'Terminé'" 
+                class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md"
+                (click)="openEnAttenteModal()">
+          En attente de matériel
+        </button>
+        <button *ngIf="selectedRdv.etat !== 'Terminé'" 
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+                (click)="terminerRendezvous()">
+          Terminer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center" *ngIf="showVoitureModal">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center">
+      <h3 class="text-xl font-bold text-gray-800">Ajouter une voiture</h3>
+      <button class="text-gray-500 hover:text-gray-700 text-2xl" (click)="closeModals()">×</button>
+    </div>
+    
+    <form (ngSubmit)="addVoiture()" class="p-6 space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Marque</label>
+        <input [(ngModel)]="nouvelleVoiture.marque" name="marque" required
+               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Modèle</label>
+        <input [(ngModel)]="nouvelleVoiture.modele" name="modele" required
+               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Immatriculation</label>
+        <input [(ngModel)]="nouvelleVoiture.immatriculation" name="immatriculation" required
+               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Année</label>
+        <input [(ngModel)]="nouvelleVoiture.annee" name="annee" type="number" required
+               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" (click)="closeModals()" 
+                class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">
+          Annuler
+        </button>
+        <button type="submit" 
+                class="px-4 py-2 bg-primary text-white rounded-lg">
+          Ajouter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center" *ngIf="showReparationModal">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center">
+      <h3 class="text-xl font-bold text-gray-800">Ajouter une réparation</h3>
+      <button class="text-gray-500 hover:text-gray-700 text-2xl" (click)="closeModals()">×</button>
+    </div>
+    
+    <form (ngSubmit)="addReparation()" class="p-6 space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Voiture</label>
+        <select [(ngModel)]="nouvelleReparation.voiture" name="voiture" required
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option *ngFor="let voiture of voitures" [value]="voiture._id">
+            {{voiture.marque}} {{voiture.modele}} ({{voiture.immatriculation}})
+          </option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Date</label>
+        <input [(ngModel)]="nouvelleReparation.daty" name="daty" type="date" required
+               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea [(ngModel)]="nouvelleReparation.description" name="description" required rows="3"
+                  class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Produits utilisés</label>
+        <select [(ngModel)]="nouvelleReparation.produit" name="produit" required
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option *ngFor="let service of services" [value]="service._id">
+            {{service.designation}} {{service.prixvente}} 
+          </option>
+        </select>
+      </div>
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" (click)="closeModals()" 
+                class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">
+          Annuler
+        </button>
+        <button type="submit" 
+                class="px-4 py-2 bg-primary text-white rounded-lg">
+          Ajouter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center" *ngIf="showEnAttenteModal">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center">
+      <h3 class="text-xl font-bold text-gray-800">Passer en attente de matériel</h3>
+      <button class="text-gray-500 hover:text-gray-700 text-2xl" (click)="closeModals()">×</button>
+    </div>
+    
+    <form (ngSubmit)="enAttente()" class="p-6 space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-gray-700">Remarque</label>
+        <textarea [(ngModel)]="remarque" name="remarque" rows="3"
+                 class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" (click)="closeModals()" 
+                class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">
+          Annuler
+        </button>
+        <button type="submit" 
+                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+          Confirmer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

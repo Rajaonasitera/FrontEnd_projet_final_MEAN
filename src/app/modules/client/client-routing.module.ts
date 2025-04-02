@@ -18,7 +18,7 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent, canActivate: [ClientAuthGuard] },
       { path: 'produits', component: ProduitsComponent },
       { path: 'rendezvous', component: RendezVousComponent, canActivate: [ClientAuthGuard] },
-      { path: '**', component: ErrorComponent },
+      { path: '**', redirectTo: 'errors/404' },
     ],
   },
 ];
