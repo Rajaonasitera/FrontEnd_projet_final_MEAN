@@ -19,6 +19,7 @@ export class ProfileComponent {
   rendezVousSelectionne: any = null;
   rendezVousReparations: any[] = [];
   clientId: string = "";
+  user: any = null;
 
   constructor(private serviceService: ServiceService, private router: Router){}
 
@@ -31,8 +32,14 @@ export class ProfileComponent {
       const token = localStorage.getItem("Token");
       if (token) {
         this.clientId = await this.serviceService.getIdClient(token);
-      this.paniersClient = await this.serviceService.getPanierByClient(this.clientId);
-      this.suiviRendezVous = await this.serviceService.getRendezVousByClient(this.clientId);
+        this.paniersClient = await this.serviceService.getPanierByClient(this.clientId);
+        this.suiviRendezVous = await this.serviceService.getRendezVousByClient(this.clientId);
+        for (let rdv of this.suiviRendezVous) {
+          if (rdv.personnel !== "En attente") {
+            rdv.mecanicien = await this.serviceService.getClient(rdv.personnel);
+          }
+        }
+        this.user = await this.serviceService.getClient(this.clientId);
       }
     } catch (error) {
       this.router.navigate(["error/error-server"]); 
@@ -47,7 +54,7 @@ export class ProfileComponent {
   async afficherDetailsRendezVous(rendezVous: any) {
     this.rendezVousSelectionne = rendezVous;
     try {
-      // this.rendezVousReparations = await this.serviceService.getReparationsByRendezVous(rendezVous._id);
+      this.rendezVousReparations = await this.serviceService.getReparations(rendezVous._id);
     } catch (error) {
       this.rendezVousReparations = [];
       this.router.navigate(["error/error-server"]);
@@ -152,18 +159,19 @@ export class ProfileComponent {
             doc.setFontSize(12);
             doc.text(`Date: ${(new Date(rendezVous.date)).toLocaleDateString()}`, 10, 50);
             doc.text(`Client: ${user.name}`, 10, 60);
-            doc.text(`Numéro de facture: REP-${rendezVous._id}`, 10, 70);
+            doc.text(`Voiture: ${rendezVous._id}`, 10, 70);
+            doc.text(`Numéro de facture: REP-${rendezVous._id}`, 10, 80);
 
             doc.setLineWidth(0.5);
             doc.line(10, 75, 200, 75);
 
             autoTable(doc, {
-              startY: 80,
-              head: [['Description', 'Durée (heures)', 'Prix']],
+              startY: 90,
+              head: [['Service', 'date', 'Prix']],
               body: reparations.map((reparation: any) => [
                 reparation.description,
                 reparation.duree,
-                `${reparation.prix} Ar`
+                `${reparation.prixvente} Ar`
               ]),
               theme: 'grid',
               styles: { fontSize: 10, cellPadding: 3 },

@@ -46,6 +46,30 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits/allServices`));
   }
 
+  async getStocks(): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}stock`));
+  }
+
+  async getStock(idProduit: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}stock/`+idProduit));
+  }
+
+  async getNbDispoStock(idProduit: string): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}stock/`+idProduit));
+  }
+
+  async checkStock(idProduit: string, quantite: number): Promise<any[]> {
+    const body = {
+      produitId: idProduit,
+      qte: quantite
+    }
+    return firstValueFrom(this.http.post<any[]>(`${this.apiUrl}stock/check-stock`, body));
+  }
+
+  async postStock(stock: any): Promise<any> {
+    return firstValueFrom(this.http.post<any>(`${this.apiUrl}stock`, stock));
+  }
+
   async getVoitures(): Promise<any[]> {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}voitures`));
   }

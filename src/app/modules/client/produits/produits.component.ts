@@ -41,16 +41,21 @@ export class ProduitsComponent {
     this.selectedProduit = null;
   }
 
-  ajouterAuPanier() {
+  async ajouterAuPanier() {
     if (this.selectedProduit) {
-      const index = this.panier.findIndex(item => item.produit._id === this.selectedProduit._id);
+      const qtStock = await this.serviceService.getNbDispoStock(this.selectedProduit._id);
+      
+      if (Number(qtStock.qte) >= this.quantity ) {
+        const index = this.panier.findIndex(item => item.produit._id === this.selectedProduit._id);
 
-      if (index !== -1) {
-        this.panier[index].quantity += this.quantity;
-      } else {
-        this.panier.push({ produit: this.selectedProduit, quantity: this.quantity });
+        if (index !== -1) {
+          this.panier[index].quantity += this.quantity;
+        } else {
+          this.panier.push({ produit: this.selectedProduit, quantity: this.quantity });
+        }
+      }else{
+        alert("Quantité insuffisante en stock. Seulement "+ qtStock.qte +" unités restantes.");
       }
-
       this.closeModal();
     }
   }

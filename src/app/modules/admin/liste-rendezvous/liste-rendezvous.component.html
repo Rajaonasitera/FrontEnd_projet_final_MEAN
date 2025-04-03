@@ -72,7 +72,7 @@
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button 
                   (click)="voirDetails(rendezvous)"
-                  class="text-blue-600 hover:text-blue-900 mr-3">
+                  class="text-primary hover:text-blue-900 mr-3">
                   Détails
                 </button>
               </td>
@@ -138,7 +138,7 @@
                 </div>
               </div>
               
-              <div class="mb-6" *ngIf="selectedRendezvous.etat !== 'En cours'">
+              <div class="mb-6" *ngIf="selectedRendezvous.etat !== 'En cours' && selectedRendezvous.etat !== 'Annulé' && selectedRendezvous.etat !== 'Terminé'">
                 <h4 class="font-medium text-gray-900 mb-2">Assignation</h4>
                 <div class="flex items-center">
                   <select 
@@ -151,7 +151,7 @@
                   </select>
                   <button 
                     (click)="assignerMecanicien()"
-                    class="ml-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    class="ml-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Assigner
                   </button>
                 </div>
@@ -163,11 +163,11 @@
           <button
             type="button"
             (click)="fermerModal()"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
             Fermer
           </button>
           <button
-            type="button" *ngIf="selectedRendezvous.etat !== 'Annulé'"
+            type="button" *ngIf="selectedRendezvous.etat !== 'Annulé' && selectedRendezvous.etat !== 'Terminé'"
             (click)="annulerRendezVous()"
             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
             Annuler rendez vous

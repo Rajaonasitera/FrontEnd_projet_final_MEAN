@@ -42,7 +42,7 @@ body {
   
   .btn {
     display: inline-block;
-    background-color: #2563eb;
+    background-color: var(--primary);
     color: white;
     padding: 12px 24px;
     border-radius: 4px;
@@ -51,7 +51,7 @@ body {
   }
   
   .btn:hover {
-    background-color: #1d4ed8;
+    background-color: var(--primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -85,7 +85,7 @@ body {
   }
   
   .service-card h3 {
-    color: #2563eb;
+    color: var(--primary);
   }
   
   #realisations {
@@ -147,7 +147,7 @@ body {
   }
   
   .service-nav-btn:hover {
-    background: #2563eb;
+    background:var(--primary);
     color: white;
   }
   
@@ -160,11 +160,11 @@ body {
   }
   
   .text-primary {
-    color: #2563eb;
+    color: var(--primary);
   }
   
   .bg-primary {
-    background-color: #2563eb;
+    background-color: var(--primary);
   }
   
   @media (max-width: 768px) {

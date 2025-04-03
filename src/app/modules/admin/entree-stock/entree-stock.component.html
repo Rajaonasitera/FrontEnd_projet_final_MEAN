@@ -1,0 +1,95 @@
+<div
+  id="main-content"
+  class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted flex w-full flex-col items-center justify-center">
+  <div class="w-full max-w-7xl px-4 py-8 sm:px-8">
+    <div class="bg-background mb-6 rounded-lg p-6 shadow-md">
+      <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <h2 class="text-foreground text-lg font-semibold">Liste des stocks</h2>
+        <div class="relative w-full md:w-64">
+          <input
+            type="search"
+            id="search"
+            class="bg-card border-border text-foreground block w-full rounded-lg border p-2.5 pl-10 text-sm"
+            placeholder="Rechercher un produit en stock..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="appliquerFiltres()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+      <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ouvrirEntreeStockModal()">Entrée de stock</button>
+    </div>
+  </div>
+
+  <div class="bg-background rounded-lg shadow-md w-full max-w-7xl px-4 py-8 sm:px-8" style="height: 500px;">
+    <div class="relative">
+        <table class="w-full table-auto">
+            <thead class="bg-muted/20 text-muted-foreground text-xs uppercase">
+                <tr>
+                    <th class="py-3 px-4 text-left">Produit</th>
+                    <th class="py-3 px-4 text-left">Quantité</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="w-full table-auto">
+                <tbody>
+                    <tr *ngFor="let stock of stocksFiltres" class="border-border hover:bg-card/50 border-b border-dashed">
+                        <td class="py-4 px-4 text-left">
+                            <div class="flex items-center">
+                                <div class="bg-primary text-primary-foreground mr-3 flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium">
+                                    {{ stock.produitId.designation.charAt(0) }}
+                                </div>
+                                <div class="text-foreground font-medium">{{ stock.produitId.designation }}</div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-left">{{ stock.qte }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <button class="rounded-md bg-primary px-3 py-1 text-xs font-semibold text-white hover:bg-blue-600"
+                                (click)="voirDetails(stock)">Voir détails</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedStock" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Détails du stock</h2>
+      <label class="block text-sm font-medium text-gray-700">Produit</label>
+      <input type="text" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedStock.produitId.designation" disabled />
+      
+      <label class="block text-sm font-medium text-gray-700">Quantité</label>
+      <input type="number" class="w-full p-2 border rounded mb-2" [(ngModel)]="selectedStock.qte" [disabled]="!isEditing" />
+
+      <div class="mt-4 flex justify-end space-x-2">
+        <button *ngIf="!isEditing" class="bg-yellow-500 text-white px-4 py-2 rounded" (click)="isEditing = true">Modifier</button>
+        <button *ngIf="isEditing" class="bg-green-500 text-white px-4 py-2 rounded" (click)="enregistrerModificationStock()">Enregistrer</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isEntreeStockModalOpen" class="fixed inset-0 bg-opacity-50 backdrop-blur-lg flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4">Entrée de stock</h2>
+      
+      <label class="block text-sm font-medium text-gray-700">Produit</label>
+      <select class="w-full p-2 border rounded mb-4" [(ngModel)]="nouvelleEntree.produitId">
+        <option *ngFor="let produit of produits" [value]="produit._id">{{ produit.designation }}</option>
+      </select>
+      
+      <label class="block text-sm font-medium text-gray-700">Quantité</label>
+      <input type="number" class="w-full p-2 border rounded mb-4" [(ngModel)]="nouvelleEntree.quantite" />
+      
+      <div class="mt-4 flex justify-end space-x-2">
+        <button class="bg-green-500 text-white px-4 py-2 rounded" (click)="ajouterEntreeStock()">Valider</button>
+        <button class="bg-gray-300 px-4 py-2 rounded" (click)="fermerEntreeStockModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

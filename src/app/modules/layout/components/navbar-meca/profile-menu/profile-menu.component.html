@@ -11,7 +11,7 @@
       clickOutside
       (clickOutside)="isOpen = false"
       class="h-9 w-9 rounded-md"
-      src="https://avatars.githubusercontent.com/u/12519008?v=4"
+      src="../../../../../../assets/images/user.png"
       alt="" />
   </button>
   <div
@@ -19,7 +19,7 @@
     class="bg-background shadow-custom absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md py-4 ring-1 ring-transparent ring-opacity-5 transition focus:outline-hidden">
     <div class="flext-row flex items-center px-4 pb-4">
       <div class="w-10 shrink-0">
-        <img class="rounded-md" src="https://avatars.githubusercontent.com/u/12519008?v=4" alt="" />
+        <img class="rounded-md" src="../../../../../../assets/images/user.png" alt="" />
       </div>
       <div class="text-foreground overflow-hidden px-2 text-sm font-semibold">
         {{user?.name}}
@@ -30,7 +30,7 @@
     <div class="border-border border-b border-dashed"></div>
 
     <ul class="my-2 mx-4 flex flex-col">
-      @for (item of profileMenu; track $index) {
+      <!-- @for (item of profileMenu; track $index) {
       <li
         routerLink="{{ item.link }}"
         :key="$index"
@@ -38,7 +38,7 @@
         <svg-icon src="{{ item.icon }}" [svgClass]="'h-5 w-5 text-muted-foreground/50'"> </svg-icon>
         {{ item.title }}
       </li>
-      }
+      } -->
       <li
         class="text-muted-foreground hover:bg-card hover:text-primary inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold"
         (click)="deconnecter()">

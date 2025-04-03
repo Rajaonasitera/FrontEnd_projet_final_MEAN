@@ -6,19 +6,19 @@
     class="mr-10 inline-flex rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground">
     <span>Se connecter</span>
 </a>
-    <img
+    <img *ngIf="isConnected"
       clickOutside
       (clickOutside)="isOpen = false"
       class="h-9 w-9 rounded-md"
-      src="https://avatars.githubusercontent.com/u/12519008?v=4"
+      src="../../../../../../assets/images/user.png"
       alt="" />
   </button>
-  <div
+  <div 
     [@openClose]="isOpen ? 'open' : 'closed'"
     class="bg-background shadow-custom absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md py-4 ring-1 ring-transparent ring-opacity-5 transition focus:outline-hidden">
     <div class="flext-row flex items-center px-4 pb-4">
       <div class="w-10 shrink-0">
-        <img class="rounded-md" src="https://avatars.githubusercontent.com/u/12519008?v=4" alt="" />
+        <img class="rounded-md" src="../../../../../../assets/images/user.png" alt="" />
       </div>
       <div class="text-foreground overflow-hidden px-2 text-sm font-semibold">
         {{user?.name}}
@@ -30,7 +30,7 @@
 
     <ul class="my-2 mx-4 flex flex-col">
       @for (item of profileMenu; track $index) {
-      <li
+      <li *ngIf="isConnected"
         routerLink="{{ item.link }}"
         :key="$index"
         class="text-muted-foreground hover:bg-card hover:text-primary inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold">

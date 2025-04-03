@@ -8,6 +8,7 @@ import { ListeRendezvousComponent } from './liste-rendezvous/liste-rendezvous.co
 import { ErrorComponent } from '../error/error.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListeReparationsComponent } from './liste-reparations/liste-reparations.component';
+import { EntreeStockComponent } from './entree-stock/entree-stock.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'liste-services', component: ListeServicesComponent },
       { path: 'liste-rendezvous', component: ListeRendezvousComponent },
       { path: 'liste-reparations', component: ListeReparationsComponent },
+      { path: 'entree-stock', component: EntreeStockComponent },
        { path: '**', redirectTo: 'errors/404' },
     ],
   },
