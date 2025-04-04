@@ -50,12 +50,12 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}stock`));
   }
 
-  async getStock(idProduit: string): Promise<any[]> {
-    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}stock/`+idProduit));
+  async getStock(idProduit: string): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}stock/`+idProduit));
   }
 
-  async getNbDispoStock(idProduit: string): Promise<any> {
-    return firstValueFrom(this.http.get<any>(`${this.apiUrl}stock/`+idProduit));
+  async getNbDispoStock(idProduit: string): Promise<any[]> {
+    return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}stock/`+idProduit));
   }
 
   async checkStock(idProduit: string, quantite: number): Promise<any[]> {
@@ -153,12 +153,12 @@ export class ServiceService {
 
   async getType(token: string): Promise<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getRole`, { headers }));
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}getRole`, { headers }));
   }
 
   async getIdClient(token: string): Promise<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return await firstValueFrom(this.http.get<any>(`${this.apiUrl}getUserId`, { headers }));
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}getUserId`, { headers }));
   }
 
   async check(email: string, password: string): Promise<any> {
@@ -179,4 +179,29 @@ export class ServiceService {
     
     return firstValueFrom(this.http.post<any>(`${this.apiUrl}register`, user))
   }
+
+  async getCountAllRdv(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/countAllRdv`));
+  }
+
+  async getCountRdvPending(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/countRdvPending`));
+  }
+
+  async getCountRdvLoading(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/countRdvLoading`));
+  }
+
+  async getCountRdvAnnule(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/countRdvAnnule`));
+  }
+
+  async getCountRdvDone(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/countRdvDone`));
+  }
+
+  async getStat(): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}rdv/stat`));
+  }
+
 }
