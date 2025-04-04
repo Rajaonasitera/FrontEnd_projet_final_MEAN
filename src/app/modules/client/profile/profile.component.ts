@@ -55,6 +55,11 @@ export class ProfileComponent {
     this.rendezVousSelectionne = rendezVous;
     try {
       this.rendezVousReparations = await this.serviceService.getReparations(rendezVous._id);
+
+      for (let rep of this.rendezVousReparations) {
+        rep.produit = await this.serviceService.getProduit(rep.produit);
+      }
+      
     } catch (error) {
       this.rendezVousReparations = [];
       this.router.navigate(["error/error-server"]);
@@ -70,7 +75,7 @@ export class ProfileComponent {
   }
 
   getTotalReparations(reparations: any[]) {
-    return reparations.reduce((sum, reparation) => sum + reparation.prix, 0);
+    return reparations.reduce((sum, reparation) => sum + reparation.service.prixvente, 0);
   }
 
   fermerModal() {
@@ -141,6 +146,10 @@ export class ProfileComponent {
       const id = await this.serviceService.getIdClient(token);
       const user: any = await this.serviceService.getClient(id);
 
+      for (let rep of reparations) {
+        rep.service = await this.serviceService.getProduit(rep.produit);
+      }
+
       const doc = new jsPDF();
 
       fetch('assets/icons/logo.png')
@@ -169,9 +178,9 @@ export class ProfileComponent {
               startY: 90,
               head: [['Service', 'date', 'Prix']],
               body: reparations.map((reparation: any) => [
-                reparation.description,
-                reparation.duree,
-                `${reparation.prixvente} Ar`
+                reparation.service.designation,
+                reparation.date,
+                `${reparation.service.prixvente} Ar`
               ]),
               theme: 'grid',
               styles: { fontSize: 10, cellPadding: 3 },

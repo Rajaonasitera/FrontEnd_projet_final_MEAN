@@ -38,6 +38,10 @@ export class ServiceService {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits`));
   }
 
+  async getProduit(idProduit:string): Promise<any> {
+    return firstValueFrom(this.http.get<any>(`${this.apiUrl}produits/byId/`+idProduit));
+  }
+  
   async getArticles(): Promise<any[]> {
     return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}produits/allArticles`));
   }

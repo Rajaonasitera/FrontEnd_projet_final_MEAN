@@ -105,10 +105,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let detail of panierSelectionneDetails" class="border-b border-dashed border-border">
-              <td class="py-2 text-left">{{ detail.produit.designation }}</td>
-              <td class="py-2 text-right">{{ detail.produit.prixvente}} Ar</td>
+              <td class="py-2 text-left">{{ detail.produitId.designation }}</td>
+              <td class="py-2 text-right">{{ detail.produitId.prixvente}} Ar</td>
               <td class="py-2 text-right">{{ detail.qte }}</td>
-              <td class="py-2 text-right">{{ (detail.produit.prixvente * detail.qte)}} Ar</td>
+              <td class="py-2 text-right">{{ (detail.produitId.prixvente * detail.qte)}} Ar</td>
             </tr>
           </tbody>
         </table>
