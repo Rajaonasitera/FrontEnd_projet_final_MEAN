@@ -1,0 +1,87 @@
+<form class="my-10 space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="text-center">
+    <h2 class="text-foreground mb-1 text-3xl font-semibold">
+      Bienvenue <span class="text-primary">!</span>
+    </h2>
+    <p class="text-muted-foreground text-sm">Connectez-vous à votre compte.</p>
+  </div>
+
+  <div class="space-y-3 text-left">
+    <div class="form__group">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="email" 
+          formControlName="email"
+          class="peer w-full border border-blue-500 rounded-md p-2 pt-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder=" " 
+        />
+        <label 
+          for="email" 
+          class="absolute left-2 top-1 text-gray-500 text-sm bg-white px-1 transition-all scale-95"
+        >
+          Email
+        </label>
+      </div>      
+      <div *ngIf="submitted && f['email'].errors" class="is__invalid-error">
+        <div *ngIf="f['email'].errors['required']">Champ requis</div>
+      </div>
+    </div>
+  
+    <div class="form__group">
+      <div class="relative">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="password"
+          formControlName="password"
+          [ngClass]="{ 'border-red-500': submitted && f['password'].errors }"
+          class="peer block w-full border border-gray-300 rounded-md p-2 pt-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder=" "
+        />
+        
+        <label
+          for="password"
+          class="absolute left-2 top-1 text-gray-500 text-sm bg-white px-1 transition-all scale-95">
+          Mot de passe
+        </label>
+      
+        <span class="absolute top-4 right-3 cursor-pointer text-gray-500 hover:text-gray-700" 
+              (click)="togglePasswordVisibility()" 
+              aria-label="Afficher/Masquer le mot de passe">
+          <svg-icon
+            [src]="!showPassword ? 'assets/icons/heroicons/outline/eye-off.svg' : 'assets/icons/heroicons/outline/eye.svg'"
+            [svgClass]="'h-5 w-5'">
+          </svg-icon>
+        </span>
+      </div>
+      
+      <div *ngIf="submitted && f['password'].errors" class="is__invalid-error">
+        <div *ngIf="f['password'].errors['required']">Champ requis</div>
+      </div>
+    </div>
+  </div>  
+
+  <div class="mb-2 flex items-center justify-between space-x-3">
+    <!-- <div class="flex items-center">
+      <input id="remember-me" type="checkbox" formControlName="rememberMe" />
+      <label for="remember-me" class="text-muted-foreground ml-2 block text-sm"> Se souvenir de moi </label>
+    </div> -->
+
+    <app-button routerLink="/auth/mot-de-passe-oublie" impact="none" tone="primary" shape="rounded" size="small">
+      Mot de passe oublié ?
+    </app-button>
+  </div>
+
+  <div>
+    <app-button full impact="bold" tone="primary" shape="rounded" size="medium">
+      Se connecter
+    </app-button>
+  </div>
+
+  <div class="text-muted-foreground flex items-center text-sm">
+    Pas encore inscrit ?
+    <app-button routerLink="/auth/inscription" impact="none" tone="primary" shape="rounded" size="small">
+      Créer un compte
+    </app-button>
+  </div>
+</form>

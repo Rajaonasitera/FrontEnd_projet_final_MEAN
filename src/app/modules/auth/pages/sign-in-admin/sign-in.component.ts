@@ -13,7 +13,7 @@ import { ServiceService } from 'src/app/utiles/service.service';
   styleUrls: ['./sign-in.component.css'],
   imports: [FormsModule, ReactiveFormsModule, RouterLink, AngularSvgIconModule, NgIf, ButtonComponent, NgClass],
 })
-export class SignInComponent implements OnInit {
+export class SignInAdminComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
   showPassword = false;
@@ -22,7 +22,7 @@ export class SignInComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      email: ['client@gmail.com', Validators.required], 
+      email: ['admin@gmail.com', Validators.required], 
       password: ['12345', Validators.required]
     });
   }

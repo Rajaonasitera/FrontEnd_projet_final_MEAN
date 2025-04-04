@@ -4,6 +4,9 @@ import { LayoutComponent } from './layout.component';
 import { ClientComponent } from '../client/client.component';
 import { AdminComponent } from '../admin/admin.component';
 import { AuthGuard } from '../guards/auth.guard';
+import { ClientAuthGuard } from '../guards/client-auth.guard';
+import { AdminAuthGuard } from '../guards/admin-auth.guard';
+import { MecaAuthGuard } from '../guards/meca-auth.guard';
 
 const routes: Routes = [
   {
@@ -14,16 +17,19 @@ const routes: Routes = [
   {
     path: 'client',
     component: LayoutComponent,
+    // canActivate: [ClientAuthGuard],
     loadChildren: () => import('../client/client.module').then((m) => m.ClientModule),
   },
   {
     path: 'admin',
     component: LayoutComponent,
+    canActivate: [AdminAuthGuard],
     loadChildren: () => import('../admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'meca',
     component: LayoutComponent,
+    canActivate: [MecaAuthGuard],
     loadChildren: () => import('../meca/meca.module').then((m) => m.MecaModule),
   },
   {
